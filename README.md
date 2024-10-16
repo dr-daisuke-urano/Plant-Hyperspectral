@@ -1,5 +1,5 @@
 # Leaf Color Patterns Highlighted with Spectral Components Analysis
-This is the official implementation for Krishnamoorthi S et al. (2024) STAR\*PROTOCOL. 
+This is the official implementation for Krishnamoorthi S et al. (2024) STAR\*Protocol. 
 
 ## Summary
 Leaf color patterns in nature exhibit remarkable diversity related to chemical properties and structural leaf features. Hyperspectral imaging captures such diverse color patterns with high spectral resolution. Hyperspectral image data are stored as 3D cubes with spatial and spectral dimensions (x, y, and λ). With over 100 spectral channels, specialized analysis is needed to extract and visualize biologically meaningful data. Spectral component analysis is a powerful technique for extracting complex spectral patterns from leaf reflectance. By projecting hyperspectral images onto decomposed components, this method can reveal distinct color patterns and, in some cases, identify previously undetectable features on leaves. This protocol outlines the steps for correcting uneven lighting, identifying spectral components, and projecting hyperspectral cubes onto these components to highlight specific spectral features.
@@ -8,16 +8,16 @@ Leaf color patterns in nature exhibit remarkable diversity related to chemical p
 This protocol outlines the steps for correcting uneven lighting, identifying spectral components, and projecting hyperspectral cubes onto these components to highlight specific spectral features. Originally developed to analyze foliar color changes in Marchantia polymorpha under nutrient stress (Krishnamoorthi S et al. (2024) Cell Reports [https://doi.org/10.1016/j.celrep.2024.114463]), this GitHub repository utilizes ornamental plants as alternative applications.
 </br>
 </br>
-
+## Project Workflow
 <img src="https://github.com/dr-daisuke-urano/Plant-Hyperspectral/blob/main/Figure2.jpg" alt="Alt text" width="35%">
-The flowchart outlines the process of applying spectral component analysis techniques and pixel-clustering techniques to hyperspectral data, as well as effective image acquisition and brightness adjustment.
+The flowchart outlines the process of applying spectral component analysis techniques and pixel-clustering techniques to hyperspectral data, as well as brightness adjustment. Please find Krishnamoorthi S (2024) STAR\*Protocol for image acquisition and details of the method.
 </br>
 
 ## Dependencies
-To create a Conda environment with the dependencies used in Krishmoorthi S (2024), download environment.yml file and use the following command:
+To create a Conda environment with the dependencies used in Krishmoorthi S (2024) STAR\*Protocol, download environment.yml file and use the following command:
 
 ```bash
-conda env create --name PlantHyperspectralSVD --file environment.yml
+conda env create --name Plant-Hyperspectral --file environment.yml
 ```
 
 - python 3.12.3
@@ -28,9 +28,11 @@ conda env create --name PlantHyperspectralSVD --file environment.yml
 - seaborn 0.11.2
 - scikit-learn 1.5.0
 - scipy 1.13.1
+- spectral 0.23.1
+- joblib 1.4.2
 
 ## Usage
-### Step 0 (Prerequisites): 
+### Normalization of reflectance: 
 Background masking and ROI selection (i.e., leaf pixels within the three distinct regions) are required to obtain leaf reflectance spectra. We provide a simple GUI that assists users in masking the background, selecting plants, and obtaining mean reflectance spectra from the central, paracentral, and peripheral areas, as well as from the whole plants. The obtained spectral data are saved in CSV format. Sample hyperspectral images for the control (ID: 421), phosphate deficiency (ID: 397), nitrate deficiency (ID: 323), and iron deficiency (ID: 347) conditions are provided at [https://github.com/dr-daisuke-urano/PlantHyperspectralSVD/tree/main/SPECIM_sample_images]
 
 ```python
