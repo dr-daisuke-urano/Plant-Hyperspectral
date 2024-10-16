@@ -3,12 +3,15 @@ This is the official implementation for Krishnamoorthi S et al. (2024) STAR\*PRO
 
 ## Summary
 Leaf color patterns in nature exhibit remarkable diversity related to chemical properties and structural leaf features. Hyperspectral imaging captures such diverse color patterns with high spectral resolution. Hyperspectral image data are stored as 3D cubes with spatial and spectral dimensions (x, y, and λ). With over 100 spectral channels, specialized analysis is needed to extract and visualize biologically meaningful data. Spectral component analysis is a powerful technique for extracting complex spectral patterns from leaf reflectance. By projecting hyperspectral images onto decomposed components, this method can reveal distinct color patterns and, in some cases, identify previously undetectable features on leaves. This protocol outlines the steps for correcting uneven lighting, identifying spectral components, and projecting hyperspectral cubes onto these components to highlight specific spectral features.
-<p></P>
+</br>
+</br>
 This protocol outlines the steps for correcting uneven lighting, identifying spectral components, and projecting hyperspectral cubes onto these components to highlight specific spectral features. Originally developed to analyze foliar color changes in Marchantia polymorpha under nutrient stress (Krishnamoorthi S et al. (2024) Cell Reports [https://doi.org/10.1016/j.celrep.2024.114463]), this GitHub repository utilizes ornamental plants as alternative applications.
-<p></P>
+</br>
+</br>
 
-<img src="https://github.com/dr-daisuke-urano/Plant-Hyperspectral/blob/main/Figure2.jpg" alt="Alt text" width="70%">
-Figure 1: (A) Illustration depicting the central, paracentral, and peripheral regions of liverworts. (B-F) Images and corresponding reflectance spectra of liverworts cultivated under various nutrient deficiencies. Dashed lines in green, red, and blue denote absorption wavelengths for chlorophyll, anthocyanin, and water, respectively.
+<img src="https://github.com/dr-daisuke-urano/Plant-Hyperspectral/blob/main/Figure2.jpg" alt="Alt text" width="35%">
+__Workflow of the Protocol__ The flowchart outlines the process of applying dimension reduction technique such as Singular Value Decomposition (SVD), Principal Component Analysis (PCA), and Non-negative Matrix Factorization (NMF), Fast Independent Component Analysis (FastICA) and clustering technique such as K-Means, C-Means and GMM to hyperspectral data. This protocol explains each step from brightness adjustment to component extraction and demonstrates how to interpret the results.
+</br>
 
 ## Project Overview
 The SPECIM IQ hyperspectral camera generates 512x512 pixel images with 204 wavelength channels. We identified SVD components that best highlight leaf color changes using the following steps and applied the SVD weight vectors to visualize specific leaf color changes associated with nutrient deficiency responses.
