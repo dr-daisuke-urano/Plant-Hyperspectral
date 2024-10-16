@@ -7,7 +7,7 @@ Leaf color patterns in nature exhibit remarkable diversity related to chemical p
 This protocol outlines the steps for correcting uneven lighting, identifying spectral components, and projecting hyperspectral cubes onto these components to highlight specific spectral features. Originally developed to analyze foliar color changes in Marchantia polymorpha under nutrient stress (Krishnamoorthi S et al. (2024) Cell Reports [https://doi.org/10.1016/j.celrep.2024.114463]), this GitHub repository utilizes ornamental plants as alternative applications.
 <p></P>
 
-<img src="https://github.com/dr-daisuke-urano/Hyperspectral_Imaging/blob/main/Figures/Figure1.png" alt="Alt text" width="70%">
+<img src="https://github.com/dr-daisuke-urano/Plant-Hyperspectral/main/Figure2.png" alt="Alt text" width="70%">
 Figure 1: (A) Illustration depicting the central, paracentral, and peripheral regions of liverworts. (B-F) Images and corresponding reflectance spectra of liverworts cultivated under various nutrient deficiencies. Dashed lines in green, red, and blue denote absorption wavelengths for chlorophyll, anthocyanin, and water, respectively.
 
 ## Project Overview
