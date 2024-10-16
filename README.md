@@ -10,18 +10,9 @@ This protocol outlines the steps for correcting uneven lighting, identifying spe
 </br>
 
 <img src="https://github.com/dr-daisuke-urano/Plant-Hyperspectral/blob/main/Figure2.jpg" alt="Alt text" width="35%">
-__Workflow of the Protocol__ The flowchart outlines the process of applying dimension reduction technique such as Singular Value Decomposition (SVD), Principal Component Analysis (PCA), and Non-negative Matrix Factorization (NMF), Fast Independent Component Analysis (FastICA) and clustering technique such as K-Means, C-Means and GMM to hyperspectral data. This protocol explains each step from brightness adjustment to component extraction and demonstrates how to interpret the results.
+The flowchart outlines the process of applying spectral component analysis techniques and pixel-clustering techniques to hyperspectral data, as well as effective image acquisition and brightness adjustment.
 </br>
 
-## Project Overview
-The SPECIM IQ hyperspectral camera generates 512x512 pixel images with 204 wavelength channels. We identified SVD components that best highlight leaf color changes using the following steps and applied the SVD weight vectors to visualize specific leaf color changes associated with nutrient deficiency responses.
-
-0. Reflectance Spectra: Obtain leaf reflectance spectra from three regions: the central circle, paracentral annulus, and peripheral annulus.
-1. Normalization: Normalize the reflectance spectra using the reflectance near 900 nm.
-2. SVD Transformation: Perform Singular Value Decomposition (SVD) and plot the leaf spectra in the top SVD dimensions.
-3. SVD Weight Matrix: Select and save the SVD weight vectors that best highlight leaf color patterns.
-4. Pseudo-Colored Image Generation: Generate pseudo-colored images using the top SVD components.
-   
 ## Dependencies
 To create a Conda environment with the dependencies used in Krishmoorthi S (2024), download environment.yml file and use the following command:
 
