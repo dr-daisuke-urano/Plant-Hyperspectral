@@ -1,10 +1,10 @@
 # Leaf Color Patterns Highlighted with Spectral Components Analysis
-This is the official implementation for Krishnamoorthi S et al. (2024) STAR*PROTOCOL. <\br>
-This protocol outlines the steps for correcting uneven lighting, identifying spectral components, and projecting hyperspectral cubes onto these components to highlight specific spectral features. Originally developed to analyze foliar color changes in Marchantia polymorpha under nutrient stress (Krishnamoorthi S et al. (2024) Cell Reports [https://doi.org/10.1016/j.celrep.2024.114463]), this STAR*PROTOCOL utilizes hyperspectral data in ornamental plants as alternative applications.
+This is the official implementation for Krishnamoorthi S et al. (2024) STAR\*PROTOCOL. 
 
-## Background
-Leaf reflectance spectra are widely utilized for diagnosing plant stresses, which often manifest as distinct leaf color patterns. Figure 1 shows liverworts (Marchantia polymorpha) grown under various nutrient deficiencies. Nitrate deficiency (0xN) and phosphate deficiency (0xP) result in early senescence and purple pigmentation in the central area, respectively. Iron deficiency (0xFe) induces leaf chlorosis starting from the peripheral growing area, while calcium deficiency (0.05xCa) leads to irreversible necrosis of the growing edges. These color changes are location-dependent, as shown in reflectance spectra obtained from three distinct regions: a central circle, paracentral annulus, and peripheral annulus (see Figure 1A).
-
+## Summary
+Leaf color patterns in nature exhibit remarkable diversity related to chemical properties and structural leaf features. Hyperspectral imaging captures such diverse color patterns with high spectral resolution. Hyperspectral image data are stored as 3D cubes with spatial and spectral dimensions (x, y, and λ). With over 100 spectral channels, specialized analysis is needed to extract and visualize biologically meaningful data. Spectral component analysis is a powerful technique for extracting complex spectral patterns from leaf reflectance. By projecting hyperspectral images onto decomposed components, this method can reveal distinct color patterns and, in some cases, identify previously undetectable features on leaves. This protocol outlines the steps for correcting uneven lighting, identifying spectral components, and projecting hyperspectral cubes onto these components to highlight specific spectral features.
+<p></P>
+This protocol outlines the steps for correcting uneven lighting, identifying spectral components, and projecting hyperspectral cubes onto these components to highlight specific spectral features. Originally developed to analyze foliar color changes in Marchantia polymorpha under nutrient stress (Krishnamoorthi S et al. (2024) Cell Reports [https://doi.org/10.1016/j.celrep.2024.114463]), this GitHub repository utilizes ornamental plants as alternative applications.
 <p></P>
 
 <img src="https://github.com/dr-daisuke-urano/Hyperspectral_Imaging/blob/main/Figures/Figure1.png" alt="Alt text" width="70%">
