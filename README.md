@@ -148,14 +148,9 @@ The function requires the following parameters.</br>
 membership, cluster_reflectance = hsi_pixel_clustering(cube, bands, num_clusters=3, method=’GMM’, path='output_directory')
 ```
 
-2.	The below step by step process explains the hsi_pixel_clustering function workflow
-a.	Reshape the 3D hyperspectral cube into a 2D array where each row corresponds to a pixel and each column corresponds to a wavelength.
-```python
-x, y, wl = cube.shape
-reshaped_cube = cube.reshape(x * y, wl)
-```
+Please refer to Krishinamoorthi S (under review) STAR\*Protocol for detailed explanations of the hsi_pixel_clustering function workflow.
 
-b.	Select the clustering method and perform pixel clusterin:
+The clustering method:
 i.	Kmeans: sklearn.cluster.KMeans
 K-Means is a hard-clustering algorithm that defines cluster centroids and assign each pixel to exactly one cluster. 
 
@@ -164,79 +159,6 @@ The Fuzzy C-Means algorithm is a soft-clustering method that assigns pixels to m
 
 iii.	GMM: sklearn.mixture.GuassianMixture
 GMM (Gaussian Mixture Model) is a soft-clustering method that classifies each pixel in hyperspectral images into several clusters based on probabilities, rather than assigning each pixel to exactly one cluster. This approach is particularly useful when spectral signatures overlap or when there is uncertainty about which cluster a pixel belongs to. 
-
-```python
-from sklearn.mixture import GaussianMixture
-model = GaussianMixture(n_components=num_clusters, max_iter=1000, covariance_type='full').fit(non_nan_reshaped_cube)
-        non_nan_cluster_membership = model.predict(non_nan_reshaped_cube)
-```
-
-c.	Recreate cluster_membership by assigning np.nan to masked pixels
-```python
-cluster_membership = np.full(x * y, np.nan)
-cluster_membership[non_nan_pixels] = non_nan_cluster_membership
-```
-
-d.	Calculate the mean reflectance and standard deviation for each cluster and all non-NaN pixels
-```python
-mean_reflectance = np.zeros((num_clusters + 1, wl))
-std_reflectance = np.zeros((num_clusters + 1, wl))
-
-for n in range(num_clusters):
-        cluster_pixels = reshaped_cube[cluster_membership == n]
-        mean_reflectance[n, :] = np.nanmean(cluster_pixels, axis=0)
-        std_reflectance[n, :] = np.nanstd(cluster_pixels, axis=0)
-
-# For the "all non-NaN pixels" group
-mean_reflectance[num_clusters,:] = np.nanmean(non_nan_reshaped_cube, axis=0)
-std_reflectance[num_clusters,:] = np.nanstd(non_nan_reshaped_cube, axis=0)
-```
-
-e.	Generate plots to visualize the results, displaying the mean reflectance with standard deviation bands and the RGB image showing spatial projections for each cluster.
-```python
-for n in range(num_clusters + 1):
-    fig = plt.figure(figsize=(8, 4))
-
-    ax1 = fig.add_subplot(1, 2, 1)
-    ax2 = fig.add_subplot(1, 2, 2)
-
-     # Plotting the mean reflectance with std bands for each cluster
-     if n < num_clusters:
-         ax1.set_title(f'Mean Reflectance for Cluster {n + 1}')
-         ax1.plot(bands, mean_reflectance[n, :], label=f'Cluster {n + 1}')
-         mask = cluster_membership.reshape(x, y) == n
-         ax2.set_title(f'{method} Cluster {n + 1}')
-         ax2.imshow(RGB * mask[:, :, np.newaxis])
-
-     # Plotting them for all non-Nan pixels
-     else:
-         ax1.set_title('Mean Reflectance for All Pixels')
-         ax1.plot(bands, mean_reflectance[n, :], label='All Pixels')
-         ax2.set_title(f'{method} All Pixels')
-         ax2.imshow(RGB)
-
-    # Fill std deviation band and add the x and y labels
-    ax1.fill_between(bands, mean_reflectance[n, :] - std_reflectance[n, :], 
-                   mean_reflectance[n, :] + std_reflectance[n, :], alpha=0.3, label='St. Dev.')
-    ax1.set_xlabel('Wavelength (nm)')
-    ax1.set_ylabel('Reflectance')
-    ax1.legend()
-    ax2.axis('off')
-
-    # Save figure if path is provided
-    if path is not None:
-        if n < num_clusters:
-            fig.savefig(fr'{path}/{method}_Cluster_{n + 1}.pdf')
-        else:
-            fig.savefig(fr'{path}/{method}_All_Pixels.pdf')
-        
-    plt.show()
-```
-
-f.	Return the cluster_membership and the mean_reflectance
-```python
-return cluster_membership, mean_reflectance
-```
 
 </br>
 </br>
