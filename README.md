@@ -121,7 +121,6 @@ resized_masked_cube = resize(cropped_masked_cube, (pix_num, pix_num, 204), mode=
 
 2.	To normalize the pixel intensity across all wavelength channels, divide the reflectance value by the mean reflectance from the 875-925 nm bands, which typically exhibit high reflectance intensities regardless of species and environmental stresses1 .
 
-Note: Figures 3B illustrates the spectral patterns before and after normalization. The normalization process reduced variability, minimizing non-biological influences and enhancing the detection of leaf color patterns, as shown by the pixel clustering results in Figures 3C.
 ```python
 normalized_cube = resized_masked_cube / resized_masked_cube[:,:,170:175].mean(axis =2)[:,:, np.newaxis]
 ```
@@ -276,16 +275,16 @@ non_nan_reshaped_cube = reshaped_cube[non_nan_pixels]
 i.	Choose and initialize the decomposition method available in sklearn.decomposition (skd):
 
 i.	SVD: skd.TruncatedSVD
-SVD factorizes the hyperspectral data into orthogonal components, a matrix of left singular vectors, an orthogonal matrix of singular values, and a matrix of right singular vectors. Top SVD components capture the largest variance in the data. The top SVD components could contain combinations of various spectral features, which may be harder to interpret intuitively.
+SVD factorizes the hyperspectral data into orthogonal components, a matrix of left singular vectors, an orthogonal matrix of singular values, and a matrix of right singular vectors. Top SVD components capture the largest variance in the data. 
 
 ii.	NMF: skd.NMF
-NMF factorizes the hyperspectral data into two non-negative matrices, producing components that are more interpretable as the leaf reflectance intensities range from 0 to 1, which cannot be negative. The NMF components are parts-based representations of the original spectra, often useful to highlight individual spectral bands corresponding to distinct phytochemical or structural features of the leaves. 
+NMF factorizes the hyperspectral data into two non-negative matrices, producing components that are more interpretable as the leaf reflectance intensities range from 0 to 1.  
 
 iii.	FastICA: skd.FastICA
-FastICA (Fast Independent Component Analysis) identifies independent components in reflectance spectra by assuming the components are statistically independent and non-Gaussian. The method first centers the data (subtracting the mean) and standardizes the variance at each wavelength. It then separates the components by maximizing their non-Gaussianity, measured using an approximation of negentropy. Finally, FastICA decorrelates the components and ensures they are statistically independent.
+FastICA (Fast Independent Component Analysis) identifies independent components in reflectance spectra by assuming the components are statistically independent and non-Gaussian. The FastICA method first centers the data (subtracting the mean) and standardizes the variance at each wavelength. It then separates the components by maximizing their non-Gaussianity, measured using an approximation of negentropy. Finally, FastICA decorrelates the components and ensures they are statistically independent.
 
 iv.	SparsePCA: skd.SparsePCA
-SparsePCA introduces a sparsity constraint on the principal components, emphasizing only a few dominant wavelengths, which makes the results easier to interpret, especially in cases where specific spectral bands correspond to chemical or structural features of the leaves. 
+SparsePCA introduces a sparsity constraint on the principal components, emphasizing only a few dominant wavelengths. 
 
 v.	Raise an error if an unsupported method is chosen.
 ```python
@@ -336,8 +335,6 @@ n.	Return the model and the projected hyperspectral cube
 ```python
 return model, projected_cube
 ```
-
-Note: Figure 3A shows pseudo-colored spectral images of Begonia Tiger Paw generated using the first five components identified by NMF, SparsePCA, SVD, and ICA. Figure 3B shows the spectral patterns of the components, illustrating how each method groups spectral data differently and emphasizes various parts of the spectrum.
 
 </br>
 <img src="https://github.com/dr-daisuke-urano/Plant-Hyperspectral/blob/main/Figure4.jpg" alt="Alt text" width="60%">
