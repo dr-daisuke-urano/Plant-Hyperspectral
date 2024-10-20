@@ -10,7 +10,8 @@ This protocol outlines the steps for correcting uneven lighting, identifying spe
 </br>
 ## Project Workflow
 <img src="https://github.com/dr-daisuke-urano/Plant-Hyperspectral/blob/main/Figure2.jpg" alt="Alt text" width="35%">
-**Workflow of the Protocol.** Please find Krishnamoorthi S (2024) STAR\*Protocol for image acquisition and details of the method.
+Workflow of the Protocol. Please find Krishnamoorthi S (2024) STAR*Protocol for image acquisition and details of the method.
+</br>
 </br>
 
 ## Dependencies
