@@ -148,8 +148,6 @@ The function requires the following parameters.</br>
 membership, cluster_reflectance = hsi_pixel_clustering(cube, bands, num_clusters=3, method=’GMM’, path='output_directory')
 ```
 
-Please refer to Krishinamoorthi S (under review) STAR\*Protocol for detailed explanations of the hsi_pixel_clustering function workflow.
-
 </br>
 <img src="https://github.com/dr-daisuke-urano/Plant-Hyperspectral/blob/main/Figure5.jpg" alt="Alt text" width="60%">
 Figure 3: Leaf spectral patterns of clustered pixels in various plant species. Begonia aconitifolia, Aglaonema symphony, and Caladium thousand. (A-C) RGB images and corresponding pixel clusters (top) selected using the GMM clustering method. GMM was applied to hyperspectral cubes after background masking and brightness normalization. The graphs (bottom) display the mean reflectance (solid line) with standard deviations (shaded bands) for the pixel clusters identified by GMM. T
@@ -168,9 +166,6 @@ The function requires the following parameters.
 ```python
 model, projected_cube = hsi_spec_comp_analysis(cube, bands, dim=10, method='SVD', path='output_directory')
 ```
-
-2.	The below step-by-step process explains the workflow of hsi_spec_comp_analysis function.
-g.	Reshape the 3D hyperspectral cube into a 2D array where each row corresponds to a pixel and each column corresponds to a wavelength.
 
 </br>
 <img src="https://github.com/dr-daisuke-urano/Plant-Hyperspectral/blob/main/Figure4.jpg" alt="Alt text" width="60%">
