@@ -66,7 +66,7 @@ plt.show()
 
 4.	To isolate and select leaf specific region, apply masking technique:
 
-&ensp; a.	Highlight the plant pixel by multiplying pre-defined plant reference spectrum with hyperspectral data. 
+&nbsp;&nbsp; a.	Highlight the plant pixel by multiplying pre-defined plant reference spectrum with hyperspectral data. 
 Note: This reference spectrum that effectively distinguishes leaf pixels from the white background. Any commonly used masking methods can be used instead.
 ```python
 reference_pic = np.dot(hyperspectral_cube[:, :,10:200], plant_reference_spectrum)
