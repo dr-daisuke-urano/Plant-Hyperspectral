@@ -69,7 +69,7 @@ a.	Highlight the plant pixel by multiplying pre-defined plant reference spectrum
 reference_pic = np.dot(hyperspectral_cube[:, :,10:200], plant_reference_spectrum)
 ```
 
-b.	To create a binary mask for easy segmentation, threshold the resulting image that highlights leaf and non-leaf regions, and refine the mask by applying erosion to smooth the boundaries
+b.	To create a binary mask for easy segmentation, threshold the resulting image that highlights leaf and non-leaf regions, and refine the mask by applying erosion to smooth the boundaries</br>
 Critical: The threshold value for masking the white background can be adjusted as needed for individual cases. It significantly affects the quality of the segmentation.
 
 ```python
