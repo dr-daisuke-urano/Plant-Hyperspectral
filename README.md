@@ -126,6 +126,10 @@ Note: Figures 3B illustrates the spectral patterns before and after normalizatio
 normalized_cube = resized_masked_cube / resized_masked_cube[:,:,170:175].mean(axis =2)[:,:, np.newaxis]
 ```
 
+<img src="https://github.com/dr-daisuke-urano/Plant-Hyperspectral/blob/main/Figure3.jpg" alt="Alt text" width="60%">
+Figure 2: Brightness adjustment of leaf reflectance spectra of Goeppertia makoyana hyperspectral images. 
+(A) RGB images of the ventral and dorsal sides of G. makoyana leaves, with a 1 cm scale bar. (B, C) Reflectance patterns and pixel clustering of light-green and dark-green pixels. The graphs display the mean reflectance (solid line) and standard deviation (shaded regions). Data are shown from (top) the original hyperspectral image under uniform lighting, (middle) the same image with a manually applied brightness gradient (90% to 111%), and (bottom) the brightness-normalized image. 
+</br>
 
 ## Data processing
 After background masking and normalization, the hyperspectral cube is prepared for visualizing leaf spectral patterns, extracting pixel groups with similar patterns using clustering algorithms (Figure 3C), and identifying spectral features through spectral component analysis (Figure 4B). 
@@ -334,11 +338,6 @@ return model, projected_cube
 ```
 
 Note: Figure 3A shows pseudo-colored spectral images of Begonia Tiger Paw generated using the first five components identified by NMF, SparsePCA, SVD, and ICA. Figure 3B shows the spectral patterns of the components, illustrating how each method groups spectral data differently and emphasizes various parts of the spectrum.
-
-<img src="https://github.com/dr-daisuke-urano/Plant-Hyperspectral/blob/main/Figure3.jpg" alt="Alt text" width="60%">
-Figure 4: Brightness adjustment of leaf reflectance spectra of Goeppertia makoyana hyperspectral images. 
-(A) RGB images of the ventral and dorsal sides of G. makoyana leaves, with a 1 cm scale bar. (B, C) Reflectance patterns and pixel clustering of light-green and dark-green pixels. The graphs display the mean reflectance (solid line) and standard deviation (shaded regions). Data are shown from (top) the original hyperspectral image under uniform lighting, (middle) the same image with a manually applied brightness gradient (90% to 111%), and (bottom) the brightness-normalized image. 
-</br>
 
 ## Citation
 Shalini Krishnamoorthi, Grace Zi Hao Tan, Yating Dong, Richalynn Leong, Ting-Ying Wu, Daisuke Urano (2024) [https://doi.org/10.1016/j.celrep.2024.114463].<br>
