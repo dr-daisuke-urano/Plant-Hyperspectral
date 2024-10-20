@@ -1,5 +1,5 @@
 # Leaf Color Patterns Highlighted with Spectral Components Analysis
-This is the official implementation for Krishnamoorthi S et al. (2024) STAR\*Protocol. 
+This is the official implementation for Krishnamoorthi S et al. (under review) STAR\*Protocol. 
 
 ## Summary
 Leaf color patterns in nature exhibit remarkable diversity related to chemical properties and structural leaf features. Hyperspectral imaging captures such diverse color patterns with high spectral resolution. Hyperspectral image data are stored as 3D cubes with spatial and spectral dimensions (x, y, and λ). With over 100 spectral channels, specialized analysis is needed to extract and visualize biologically meaningful data. Spectral component analysis is a powerful technique for extracting complex spectral patterns from leaf reflectance. By projecting hyperspectral images onto decomposed components, this method can reveal distinct color patterns and, in some cases, identify previously undetectable features on leaves. This protocol outlines the steps for correcting uneven lighting, identifying spectral components, and projecting hyperspectral cubes onto these components to highlight specific spectral features.
@@ -10,12 +10,12 @@ This protocol outlines the steps for correcting uneven lighting, identifying spe
 </br>
 ## Project Workflow
 <img src="https://github.com/dr-daisuke-urano/Plant-Hyperspectral/blob/main/Figure2.jpg" alt="Alt text" width="35%">
-Workflow of the Protocol. Please find Krishnamoorthi S (2024) STAR*Protocol for image acquisition and details of the method.
+Workflow of the Protocol. Please find Krishnamoorthi S (under review) STAR*Protocol for image acquisition and details of the method.
 </br>
 </br>
 
 ## Dependencies
-To create a Conda environment with the dependencies used in Krishmoorthi S (2024) STAR\*Protocol, download environment.yml file and use the following command:
+To create a Conda environment with the dependencies used in Krishmoorthi S (under review) STAR\*Protocol, download environment.yml file and use the following command:
 
 ```bash
 conda env create --name Plant-Hyperspectral --file environment.yml
@@ -33,6 +33,86 @@ conda env create --name Plant-Hyperspectral --file environment.yml
 - joblib 1.4.2
 
 ## Usage
+### Data loading and Background masking
+We used a white background to capture hyperspectral images of ornamental plants. In these images, the dominant spectral patterns typically come from green leaf pixels and white background pixels, which often appear as the top features in spectral component analysis. To improve the detection of spectral features relevant to leaf color patterns, background pixels can be masked with the following steps. 
+
+
+1.	Import the necessary libraries into the python environment 
+
+Note: Version information for Python and its packages is provided in the Resource Table.
+```python
+import cv2
+import os
+import numpy as np
+from matplotlib import pyplot as plt
+from skimage.transform import resize
+'''
+
+2.	Load hyperspectral data cube from the SPECIM IQ image directory. This protocol provides specim_loading function. 
+```python
+folder = rf'path-to-directory ’
+img_ID = 6766 #Replace with hyperspec data folder
+hyperspectral_cube=specim_loading(rf'path-to-directory/{folder}’)
+'''
+
+3.	For visualization, reconstruct RGB image from hyperspectral_cube with specimIQ_RGB function 
+```python
+original_RGB = specimIQ_RGB(hyperspectral_cube, gamma=1.5) 
+cv2.imwrite('file_to_write.jpg', original_RGB[:,:,::-1])
+plt.imshow(original_RGB)
+plt.axis('off')
+plt.show()
+'''
+
+4.	To isolate and select leaf specific region, apply masking technique:
+
+a.	Highlight the plant pixel by multiplying pre-defined plant reference spectrum with hyperspectral data. 
+Note: This reference spectrum that effectively distinguishes leaf pixels from the white background. Any commonly used masking methods can be used instead.
+```python
+reference_pic = np.dot(hyperspectral_cube[:, :,10:200], plant_reference_spectrum)
+'''
+
+b.	To create a binary mask for easy segmentation, threshold the resulting image that highlights leaf and non-leaf regions, and refine the mask by applying erosion to smooth the boundaries
+```python
+_, mask = cv2.threshold(reference_pic, 1, 1, cv2.THRESH_BINARY_INV)
+mask = cv2.erode(mask, np.ones((3, 3), np.uint8))
+'''
+
+# Visualize the masked area
+```python
+plt.imshow(mask, cmap='gray')
+plt.axis('OFF')
+plt.show()
+'''
+
+Critical: The threshold value for masking the white background can be adjusted as needed for individual cases. It significantly affects the quality of the segmentation.
+
+c.	Identify contours and refine the masked area that encloses the leaf pixels
+```python
+contours, _ = cv2.findContours(mask.astype(np.uint8), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+contour = max(contours, key=cv2.contourArea)
+refined_mask = np.zeros_like(mask)
+cv2.drawContours(refined_mask, [contour], -1, (1), thickness=cv2.FILLED)
+'''
+
+# Visualize the refined masked area
+```python
+plt.imshow(refined_mask, cmap='gray')
+plt.axis('OFF')
+plt.show()
+'''
+ 
+d.	Crop the image to focus on the region of interest using the contour 
+```python
+x, y, w, h = cv2.boundingRect(contour)
+l = max(w, h)
+masked_cube = hyperspectral_cube * refined_mask[:,:,np.newaxis]
+masked_cube[masked_cube == 0] = 'nan'
+cropped_masked_cube = np.full((l, l, masked_cube.shape[2]), np.nan)
+cropped_masked_cube[(l-h)//2:h+(l-h)//2, (l-w)//2:w+(l-w)//2, :] = masked_cube[y:y+h,x:x+w,:]
+print(f'height:{h}, width:{w}')
+'''
+
 ### Normalization of reflectance: 
 Background masking and ROI selection (i.e., leaf pixels within the three distinct regions) are required to obtain leaf reflectance spectra. We provide a simple GUI that assists users in masking the background, selecting plants, and obtaining mean reflectance spectra from the central, paracentral, and peripheral areas, as well as from the whole plants. The obtained spectral data are saved in CSV format. Sample hyperspectral images for the control (ID: 421), phosphate deficiency (ID: 397), nitrate deficiency (ID: 323), and iron deficiency (ID: 347) conditions are provided at [https://github.com/dr-daisuke-urano/PlantHyperspectralSVD/tree/main/SPECIM_sample_images]
 
