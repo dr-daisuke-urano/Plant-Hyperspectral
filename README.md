@@ -46,14 +46,14 @@ import os
 import numpy as np
 from matplotlib import pyplot as plt
 from skimage.transform import resize
-'''
+```
 
 2.	Load hyperspectral data cube from the SPECIM IQ image directory. This protocol provides specim_loading function. 
 ```python
 folder = rf'path-to-directory ’
 img_ID = 6766 #Replace with hyperspec data folder
 hyperspectral_cube=specim_loading(rf'path-to-directory/{folder}’)
-'''
+```
 
 3.	For visualization, reconstruct RGB image from hyperspectral_cube with specimIQ_RGB function 
 ```python
@@ -62,7 +62,7 @@ cv2.imwrite('file_to_write.jpg', original_RGB[:,:,::-1])
 plt.imshow(original_RGB)
 plt.axis('off')
 plt.show()
-'''
+```
 
 4.	To isolate and select leaf specific region, apply masking technique:
 
@@ -70,20 +70,20 @@ a.	Highlight the plant pixel by multiplying pre-defined plant reference spectrum
 Note: This reference spectrum that effectively distinguishes leaf pixels from the white background. Any commonly used masking methods can be used instead.
 ```python
 reference_pic = np.dot(hyperspectral_cube[:, :,10:200], plant_reference_spectrum)
-'''
+```
 
 b.	To create a binary mask for easy segmentation, threshold the resulting image that highlights leaf and non-leaf regions, and refine the mask by applying erosion to smooth the boundaries
 ```python
 _, mask = cv2.threshold(reference_pic, 1, 1, cv2.THRESH_BINARY_INV)
 mask = cv2.erode(mask, np.ones((3, 3), np.uint8))
-'''
+```
 
 # Visualize the masked area
 ```python
 plt.imshow(mask, cmap='gray')
 plt.axis('OFF')
 plt.show()
-'''
+```
 
 Critical: The threshold value for masking the white background can be adjusted as needed for individual cases. It significantly affects the quality of the segmentation.
 
@@ -93,14 +93,14 @@ contours, _ = cv2.findContours(mask.astype(np.uint8), cv2.RETR_EXTERNAL, cv2.CHA
 contour = max(contours, key=cv2.contourArea)
 refined_mask = np.zeros_like(mask)
 cv2.drawContours(refined_mask, [contour], -1, (1), thickness=cv2.FILLED)
-'''
+```
 
 # Visualize the refined masked area
 ```python
 plt.imshow(refined_mask, cmap='gray')
 plt.axis('OFF')
 plt.show()
-'''
+```
  
 d.	Crop the image to focus on the region of interest using the contour 
 ```python
@@ -111,7 +111,7 @@ masked_cube[masked_cube == 0] = 'nan'
 cropped_masked_cube = np.full((l, l, masked_cube.shape[2]), np.nan)
 cropped_masked_cube[(l-h)//2:h+(l-h)//2, (l-w)//2:w+(l-w)//2, :] = masked_cube[y:y+h,x:x+w,:]
 print(f'height:{h}, width:{w}')
-'''
+```
 
 ### Normalization of reflectance: 
 Background masking and ROI selection (i.e., leaf pixels within the three distinct regions) are required to obtain leaf reflectance spectra. We provide a simple GUI that assists users in masking the background, selecting plants, and obtaining mean reflectance spectra from the central, paracentral, and peripheral areas, as well as from the whole plants. The obtained spectral data are saved in CSV format. Sample hyperspectral images for the control (ID: 421), phosphate deficiency (ID: 397), nitrate deficiency (ID: 323), and iron deficiency (ID: 347) conditions are provided at [https://github.com/dr-daisuke-urano/PlantHyperspectralSVD/tree/main/SPECIM_sample_images]
