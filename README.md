@@ -64,7 +64,7 @@ plt.show()
 
 4.	To isolate and select leaf specific region, apply masking technique:
 
-a.	Highlight the plant pixel by multiplying pre-defined plant reference spectrum with hyperspectral data. Note that this reference spectrum that effectively distinguishes leaf pixels from the white background. Any commonly used masking methods can be used instead.
+a.	Highlight the plant pixel by multiplying pre-defined plant reference spectrum with hyperspectral data. Any commonly used masking methods can be used instead.
 ```python
 reference_pic = np.dot(hyperspectral_cube[:, :,10:200], plant_reference_spectrum)
 ```
@@ -338,6 +338,10 @@ return model, projected_cube
 ```
 
 Note: Figure 3A shows pseudo-colored spectral images of Begonia Tiger Paw generated using the first five components identified by NMF, SparsePCA, SVD, and ICA. Figure 3B shows the spectral patterns of the components, illustrating how each method groups spectral data differently and emphasizes various parts of the spectrum.
+
+</br>
+<img src="https://github.com/dr-daisuke-urano/Plant-Hyperspectral/blob/main/Figure4.jpg" alt="Alt text" width="60%">
+Figure 4: Spectral component analysis of Hyperspectral Imaging Data. (A) Pseudo-coloured images of Aglaonema symphony obtained from the hyperspectral imaging. Colors represent pixel intensity values projected on ICA, SparcePCA, SVD and NMF components. (B) Line graphs show spectral features identified in top component, whichdescribe how the original data at each wavelength channel contribute to the top components. 
 
 ## Citation
 Shalini Krishnamoorthi, Grace Zi Hao Tan, Yating Dong, Richalynn Leong, Ting-Ying Wu, Daisuke Urano (2024) [https://doi.org/10.1016/j.celrep.2024.114463].<br>
