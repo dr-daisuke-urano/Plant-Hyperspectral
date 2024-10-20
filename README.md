@@ -10,19 +10,19 @@ This protocol outlines the steps for correcting uneven lighting, identifying spe
 </br>
 ## Project Workflow
 <img src="https://github.com/dr-daisuke-urano/Plant-Hyperspectral/blob/main/Figure2.jpg" alt="Alt text" width="35%">
-Workflow of the Protocol. Please find Krishnamoorthi S (under review) STAR*Protocol for image acquisition and details of the method.
+The protocol workflow: Please find Krishnamoorthi S (under review) STAR*Protocol for more details.
 </br>
 </br>
 
 ## Dependencies
-To create a Conda environment with the dependencies used in Krishmoorthi S (under review) STAR\*Protocol, download environment.yml file and use the following command:
+To create a Conda environment with the dependencies used in Krishmoorthi S (under review) STAR\*Protocol, download krishnamoorthi_STAR_protocol.yml file and use the following command:
 
 ```bash
 conda env create --name Plant-Hyperspectral --file environment.yml
 ```
 
 - python 3.12.3
-- matplotlib 3.8.4
+- matplotlib 3.8.4krish
 - numpy 1.26.4
 - opencv-python 4.9.0.80
 - pandas 2.2.1
@@ -65,13 +65,13 @@ plt.show()
 
 4.	To isolate and select leaf specific region, apply masking technique:
 
-&nbsp; &nbsp; a.	Highlight the plant pixel by multiplying pre-defined plant reference spectrum with hyperspectral data. 
+a.	Highlight the plant pixel by multiplying pre-defined plant reference spectrum with hyperspectral data. 
 Note: This reference spectrum that effectively distinguishes leaf pixels from the white background. Any commonly used masking methods can be used instead.
 ```python
 reference_pic = np.dot(hyperspectral_cube[:, :,10:200], plant_reference_spectrum)
 ```
 
-&nbsp; &nbsp; b.	To create a binary mask for easy segmentation, threshold the resulting image that highlights leaf and non-leaf regions, and refine the mask by applying erosion to smooth the boundaries
+b.	To create a binary mask for easy segmentation, threshold the resulting image that highlights leaf and non-leaf regions, and refine the mask by applying erosion to smooth the boundaries
 ```python
 _, mask = cv2.threshold(reference_pic, 1, 1, cv2.THRESH_BINARY_INV)
 mask = cv2.erode(mask, np.ones((3, 3), np.uint8))
@@ -86,7 +86,7 @@ plt.show()
 
 Critical: The threshold value for masking the white background can be adjusted as needed for individual cases. It significantly affects the quality of the segmentation.
 
-&nbsp; &nbsp; c.	Identify contours and refine the masked area that encloses the leaf pixels
+c.	Identify contours and refine the masked area that encloses the leaf pixels
 ```python
 contours, _ = cv2.findContours(mask.astype(np.uint8), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 contour = max(contours, key=cv2.contourArea)
@@ -101,7 +101,7 @@ plt.axis('OFF')
 plt.show()
 ```
  
-&nbsp; &nbsp; d.	Crop the image to focus on the region of interest using the contour 
+d.	Crop the image to focus on the region of interest using the contour 
 ```python
 x, y, w, h = cv2.boundingRect(contour)
 l = max(w, h)
