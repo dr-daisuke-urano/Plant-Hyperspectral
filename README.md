@@ -131,7 +131,7 @@ Figure 2: Brightness adjustment of leaf reflectance spectra of Goeppertia makoya
 </br>
 
 ## Data processing
-After background masking and normalization, the hyperspectral cube is prepared for visualizing leaf spectral patterns, extracting pixel groups with similar patterns using clustering algorithms (Figure 2C and 3), and identifying spectral features through spectral component analysis (Figure 4B). 
+After brightness normalization, the hyperspectral cube is ready for visualizing leaf spectral patterns, pixel clustering, and spectral component analysis.
 
 ### Pixel clustering 
 1.	Import the hsi_pixel_clustering function to cluster leaf pixels based on reflectance spectrum. 
