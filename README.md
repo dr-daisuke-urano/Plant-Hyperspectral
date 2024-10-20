@@ -69,16 +69,11 @@ a.	Highlight the plant pixel by multiplying pre-defined plant reference spectrum
 reference_pic = np.dot(hyperspectral_cube[:, :,10:200], plant_reference_spectrum)
 ```
 
-b.	To create a binary mask for easy segmentation, threshold the resulting image that highlights leaf and non-leaf regions, and refine the mask by applying erosion to smooth the boundaries</br>
-Critical: The threshold value for masking the white background can be adjusted as needed for individual cases. It significantly affects the quality of the segmentation.
+b.	To create a binary mask for easy segmentation, threshold the resulting image that highlights leaf and non-leaf regions, and refine the mask by applying erosion to smooth the boundaries. Note that the threshold value for masking significantly affects the quality of the segmentation.
 
 ```python
 _, mask = cv2.threshold(reference_pic, 1, 1, cv2.THRESH_BINARY_INV)
 mask = cv2.erode(mask, np.ones((3, 3), np.uint8))
-```
-
-### Visualize the masked area
-```python
 plt.imshow(mask, cmap='gray')
 plt.axis('OFF')
 plt.show()
@@ -90,10 +85,6 @@ contours, _ = cv2.findContours(mask.astype(np.uint8), cv2.RETR_EXTERNAL, cv2.CHA
 contour = max(contours, key=cv2.contourArea)
 refined_mask = np.zeros_like(mask)
 cv2.drawContours(refined_mask, [contour], -1, (1), thickness=cv2.FILLED)
-```
-
-### Visualize the refined masked area
-```python
 plt.imshow(refined_mask, cmap='gray')
 plt.axis('OFF')
 plt.show()
