@@ -22,7 +22,7 @@ conda env create --name Plant-Hyperspectral --file environment.yml
 ```
 
 - python 3.12.3
-- matplotlib 3.8.4krish
+- matplotlib 3.8.4
 - numpy 1.26.4
 - opencv-python 4.9.0.80
 - pandas 2.2.1
