@@ -150,17 +150,6 @@ membership, cluster_reflectance = hsi_pixel_clustering(cube, bands, num_clusters
 
 Please refer to Krishinamoorthi S (under review) STAR\*Protocol for detailed explanations of the hsi_pixel_clustering function workflow.
 
-The clustering method:
-i.	Kmeans: sklearn.cluster.KMeans
-K-Means is a hard-clustering algorithm that defines cluster centroids and assign each pixel to exactly one cluster. 
-
-ii.	CMeans: skfuzzy.cluster.skfuzzy
-The Fuzzy C-Means algorithm is a soft-clustering method that assigns pixels to multiple clusters with different degrees of membership.
-
-iii.	GMM: sklearn.mixture.GuassianMixture
-GMM (Gaussian Mixture Model) is a soft-clustering method that classifies each pixel in hyperspectral images into several clusters based on probabilities, rather than assigning each pixel to exactly one cluster. This approach is particularly useful when spectral signatures overlap or when there is uncertainty about which cluster a pixel belongs to. 
-
-</br>
 </br>
 <img src="https://github.com/dr-daisuke-urano/Plant-Hyperspectral/blob/main/Figure5.jpg" alt="Alt text" width="60%">
 Figure 3: Leaf spectral patterns of clustered pixels in various plant species. Begonia aconitifolia, Aglaonema symphony, and Caladium thousand. (A-C) RGB images and corresponding pixel clusters (top) selected using the GMM clustering method. GMM was applied to hyperspectral cubes after background masking and brightness normalization. The graphs (bottom) display the mean reflectance (solid line) with standard deviations (shaded bands) for the pixel clusters identified by GMM. T
@@ -182,81 +171,6 @@ model, projected_cube = hsi_spec_comp_analysis(cube, bands, dim=10, method='SVD'
 
 2.	The below step-by-step process explains the workflow of hsi_spec_comp_analysis function.
 g.	Reshape the 3D hyperspectral cube into a 2D array where each row corresponds to a pixel and each column corresponds to a wavelength.
-
-```python
-x, y, wl = cube.shape
-reshaped_cube = cube.reshape(x * y, wl)
-```
-
-h.	Remove any rows from the reshaped array that contain all NaN values across the wavelength dimension
-```python
-non_nan_pixels = ~np.all(np.isnan(reshaped_cube), axis=1)
-non_nan_reshaped_cube = reshaped_cube[non_nan_pixels]
-```
-
-i.	Choose and initialize the decomposition method available in sklearn.decomposition (skd):
-
-i.	SVD: skd.TruncatedSVD
-SVD factorizes the hyperspectral data into orthogonal components, a matrix of left singular vectors, an orthogonal matrix of singular values, and a matrix of right singular vectors. Top SVD components capture the largest variance in the data. 
-
-ii.	NMF: skd.NMF
-NMF factorizes the hyperspectral data into two non-negative matrices, producing components that are more interpretable as the leaf reflectance intensities range from 0 to 1.  
-
-iii.	FastICA: skd.FastICA
-FastICA (Fast Independent Component Analysis) identifies independent components in reflectance spectra by assuming the components are statistically independent and non-Gaussian. The FastICA method first centers the data (subtracting the mean) and standardizes the variance at each wavelength. It then separates the components by maximizing their non-Gaussianity, measured using an approximation of negentropy. Finally, FastICA decorrelates the components and ensures they are statistically independent.
-
-iv.	SparsePCA: skd.SparsePCA
-SparsePCA introduces a sparsity constraint on the principal components, emphasizing only a few dominant wavelengths. 
-
-j.	Raise an error if an unsupported method is chosen.
-```python
-raise ValueError("Unsupported method. Choose 'SVD', 'NMF', 'ICA', 'PCA' or 'SparsePCA'")
-```
-
-k.	Apply the selected decomposition model to the reshaped cube without NaN  
-```python
-hsi_model = model.fit_transform(non_nan_reshaped_cube)
-```
-
-l.	Create an empty array to restore the transformed data
-```python
-hsi_model_full = np.full((x * y, dim), np.nan)
-hsi_model_full[non_nan_pixels] = hsi_model
-```
-
-m.	Reshape the 2D data back into the 3D image
-```python
-projected_cube = hsi_model_full.reshape(x, y, dim)
-```
-
-n.	To visualize the results, generate the plots showing the wavelength and the spatial projection for each component. 
-```python
-for n in range (dim):
-        fig = plt.figure(figsize=(8,4))
-        if method in ['SVD', 'PCA']:
-            fig.suptitle(f'{method} component {n}, Explained Variance Ratio:
-                                {model.explained_variance_ratio_[n]:.3f}')
-        else:
-            fig.suptitle(f'{method} component {n}')
-            
-        ax1 = fig.add_subplot(1, 2, 1)
-        ax2 = fig.add_subplot(1, 2, 2)
-        ax1.plot(bands, model.components_[n])
-        ax1.set_xlabel('Wavelength[nm]')
-        ax1.set_ylabel('Reflectance')
-        cmap = matplotlib.colormaps.get_cmap('gist_earth')
-        cmap.set_bad(color='black')
-        ax2.imshow(projected_cube[:,:,n], cmap=cmap)
-        ax2.axis('off') 
-        if not path is None:
-            fig.savefig(fr'{path}/{method}_component_{n}.pdf')
-        plt.show()
-```
-
-o.	Return the model and the projected hyperspectral cube
-```python
-return model, projected_cube
-```
 
 </br>
 <img src="https://github.com/dr-daisuke-urano/Plant-Hyperspectral/blob/main/Figure4.jpg" alt="Alt text" width="60%">
