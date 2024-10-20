@@ -10,12 +10,12 @@ This protocol outlines the steps for correcting uneven lighting, identifying spe
 </br>
 ## Project Workflow
 <img src="https://github.com/dr-daisuke-urano/Plant-Hyperspectral/blob/main/Figure2.jpg" alt="Alt text" width="35%">
-The protocol workflow: Please find Krishnamoorthi S (under review) STAR*Protocol for more details.
+Figure 1. The workflow of protocol: Please find Krishnamoorthi S (under review) STAR*Protocol for more details.
 </br>
 </br>
 
 ## Dependencies
-To create a Conda environment with the dependencies used in Krishmoorthi S (under review) STAR\*Protocol, download krishnamoorthi_STAR_protocol.yml file and use the following command:
+To create a Conda environment with the dependencies used in Krishmoorthi S (under review) STAR\*Protocol, download environment.yml file and use the following command:
 
 ```bash
 conda env create --name Plant-Hyperspectral --file environment.yml
@@ -34,11 +34,10 @@ conda env create --name Plant-Hyperspectral --file environment.yml
 
 ## Usage
 ## Data loading and Background masking
-We used a white background to capture hyperspectral images of ornamental plants. In these images, the dominant spectral patterns typically come from green leaf pixels and white background pixels, which often appear as the top features in spectral component analysis. To improve the detection of spectral features relevant to leaf color patterns, background pixels can be masked with the following steps. 
+We used a white background to capture hyperspectral images of ornamental plants. In these images, the dominant spectral patterns typically come from green leaf pixels and white background pixels, which often appear as the top features in spectral component analysis. To improve the detection of spectral features relevant to leaf color, background pixels may be masked with the following steps. 
 
 1.	Import the necessary libraries into the python environment 
 
-Note: Version information for Python and its packages is provided in the Resource Table.
 ```python
 import cv2
 import os
@@ -65,13 +64,14 @@ plt.show()
 
 4.	To isolate and select leaf specific region, apply masking technique:
 
-a.	Highlight the plant pixel by multiplying pre-defined plant reference spectrum with hyperspectral data. 
-Note: This reference spectrum that effectively distinguishes leaf pixels from the white background. Any commonly used masking methods can be used instead.
+a.	Highlight the plant pixel by multiplying pre-defined plant reference spectrum with hyperspectral data. Note that this reference spectrum that effectively distinguishes leaf pixels from the white background. Any commonly used masking methods can be used instead.
 ```python
 reference_pic = np.dot(hyperspectral_cube[:, :,10:200], plant_reference_spectrum)
 ```
 
 b.	To create a binary mask for easy segmentation, threshold the resulting image that highlights leaf and non-leaf regions, and refine the mask by applying erosion to smooth the boundaries
+Critical: The threshold value for masking the white background can be adjusted as needed for individual cases. It significantly affects the quality of the segmentation.
+
 ```python
 _, mask = cv2.threshold(reference_pic, 1, 1, cv2.THRESH_BINARY_INV)
 mask = cv2.erode(mask, np.ones((3, 3), np.uint8))
@@ -83,8 +83,6 @@ plt.imshow(mask, cmap='gray')
 plt.axis('OFF')
 plt.show()
 ```
-
-Critical: The threshold value for masking the white background can be adjusted as needed for individual cases. It significantly affects the quality of the segmentation.
 
 c.	Identify contours and refine the masked area that encloses the leaf pixels
 ```python
