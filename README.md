@@ -62,43 +62,14 @@ plt.axis('off')
 plt.show()
 ```
 
-4.	To isolate and select leaf specific region, apply masking technique:
+4.	Isolate and select leaf specific region. We provide SpecimIQ_background_masking function that masks white background, crops the masked region, and returns the cropped hyperspectral cube and the refined mask. 
 
-a.	Highlight the plant pixel by multiplying pre-defined plant reference spectrum with hyperspectral data. Any commonly used masking methods can be used instead.
-```python
-reference_pic = np.dot(hyperspectral_cube[:, :,10:200], plant_reference_spectrum)
-```
-
-b.	To create a binary mask for easy segmentation, threshold the resulting image that highlights leaf and non-leaf regions, and refine the mask by applying erosion to smooth the boundaries. Note that the threshold value for masking significantly affects the quality of the segmentation.
+The function requires the following parameters.
+- hyperspectal_cube: 3D hyperspectral data cube of shape (x, y, λ).
+- threshold_val: A float value that sets the threshold for background masking
 
 ```python
-_, mask = cv2.threshold(reference_pic, 1, 1, cv2.THRESH_BINARY_INV)
-mask = cv2.erode(mask, np.ones((3, 3), np.uint8))
-plt.imshow(mask, cmap='gray')
-plt.axis('OFF')
-plt.show()
-```
-
-c.	Identify contours and refine the masked area that encloses the leaf pixels
-```python
-contours, _ = cv2.findContours(mask.astype(np.uint8), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-contour = max(contours, key=cv2.contourArea)
-refined_mask = np.zeros_like(mask)
-cv2.drawContours(refined_mask, [contour], -1, (1), thickness=cv2.FILLED)
-plt.imshow(refined_mask, cmap='gray')
-plt.axis('OFF')
-plt.show()
-```
- 
-d.	Crop the image to focus on the region of interest using the contour 
-```python
-x, y, w, h = cv2.boundingRect(contour)
-l = max(w, h)
-masked_cube = hyperspectral_cube * refined_mask[:,:,np.newaxis]
-masked_cube[masked_cube == 0] = 'nan'
-cropped_masked_cube = np.full((l, l, masked_cube.shape[2]), np.nan)
-cropped_masked_cube[(l-h)//2:h+(l-h)//2, (l-w)//2:w+(l-w)//2, :] = masked_cube[y:y+h,x:x+w,:]
-print(f'height:{h}, width:{w}')
+cropped_masked_cube, refined_mask = SpecimIQ_background_masking(hyperspectral_cube, threshold_val=1.0)
 ```
 
 ## Normalization of reflectance:
