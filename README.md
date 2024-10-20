@@ -113,13 +113,13 @@ print(f'height:{h}, width:{w}')
 ## Normalization of reflectance:
 Hyperspectral images of leaves could show inconsistent reflectance, due to factors like leaf tilting, bending, or camera design issues (e.g., lens vignetting). These non-biological variations can be minimized through the following normalization step.
 
-1.	To improve computational efficiency, reduce the number of pixels by resizing the data cube. Adjust pix_num as required.
+1.	To improve computational efficiency, reduce the number of pixels. Adjust pix_num as required.
 ```python
 pix_num = 200
 resized_masked_cube = resize(cropped_masked_cube, (pix_num, pix_num, 204), mode='reflect', anti_aliasing=True)
 ```
 
-2.	To normalize the pixel intensity across all wavelength channels, divide the reflectance value by the mean reflectance from the 875-925 nm bands, which typically exhibit high reflectance intensities regardless of species and environmental stresses1 .
+2.	To normalize the pixel intensity across all wavelength channels, divide the reflectance value by the mean reflectance from the 875-925 nm bands, which typically exhibit high reflectance intensities regardless of species and environmental stresses.
 
 ```python
 normalized_cube = resized_masked_cube / resized_masked_cube[:,:,170:175].mean(axis =2)[:,:, np.newaxis]
@@ -137,12 +137,12 @@ After brightness normalization, the hyperspectral cube is ready for visualizing 
 1.	Import the hsi_pixel_clustering function to cluster leaf pixels based on reflectance spectrum. 
 The function also visualizes leaf areas assigned to individual clusters and their spectral patterns. It returns a 2D array of cluster membership information and mean reflectance patterns of individual clusters. Clustering techniques available are KMeans, Gaussian Mixture Models (GMM), and Fuzzy C-Means (CMeans).
 
-The function requires the following parameters.
-cube: 3D hyperspectral data cube of shape (x, y, wavelength).
-bands: 1D array the wavelengths corresponding to the hyperspectral bands.
-method: Clustering algorithm to use. Choose from "KMeans", "GMM", or "CMeans".
-num_clusters: Number of clusters.
-path: Absolute path to the directory to save results. 
+The function requires the following parameters.</br>
+cube: 3D hyperspectral data cube of shape (x, y, wavelength).</br>
+bands: 1D array the wavelengths corresponding to the hyperspectral bands.</br>
+method: Clustering algorithm to use. Choose from "KMeans", "GMM", or "CMeans".</br>
+num_clusters: Number of clusters.</br>
+path: Absolute path to the directory to save results.</br>
 
 ```python
 membership, cluster_reflectance = hsi_pixel_clustering(cube, bands, num_clusters=3, method=’GMM’, path='output_directory')
@@ -247,12 +247,12 @@ Figure 3: Leaf spectral patterns of clustered pixels in various plant species. B
 
 1.	Import hsi_spec_comp_analysis function, which decomposes original hyperspectral images into a reduced number of components using methods such as NMF, SVD, FastICA, PCA, or SparsePCA. It returns both the fitted model and the projected data cube. 
 
-The function requires the following parameters.
-•	cube: 3D hyperspectral data cube of shape (x, y, wavelength). 
-•	bands: 1D array the wavelengths corresponding to the hyperspectral bands.
-•	dim: Number of components to retain.
-•	method: Decomposition method to use. Choose from ‘SVD', 'NMF', 'ICA', 'PCA', 'SparsePCA'. 
-•	path: Absolute path to the directory to save results. 
+The function requires the following parameters.</br>
+•	cube: 3D hyperspectral data cube of shape (x, y, wavelength).</br>
+•	bands: 1D array the wavelengths corresponding to the hyperspectral bands.</br>
+•	dim: Number of components to retain.</br>
+•	method: Decomposition method to use. Choose from ‘SVD', 'NMF', 'ICA', 'PCA', 'SparsePCA'.</br>
+•	path: Absolute path to the directory to save results.</br>
 
 ```python
 model, projected_cube = hsi_spec_comp_analysis(cube, bands, dim=10, method='SVD', path='output_directory')
