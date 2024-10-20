@@ -5,7 +5,7 @@ This is the official implementation for Krishnamoorthi S et al. (under review) S
 Leaf color patterns in nature exhibit remarkable diversity related to chemical properties and structural leaf features. Hyperspectral imaging captures such diverse color patterns with high spectral resolution. Hyperspectral image data are stored as 3D cubes with spatial (x, y) and spectral (λ) dimensions. Spectral component analysis is a powerful technique for extracting complex spectral patterns from leaf reflectance. By projecting hyperspectral images onto decomposed components, this method can reveal distinct color patterns and, in some cases, identify previously undetectable features on leaves. 
 </br>
 </br>
-This protocol outlines the steps for correcting uneven lighting, identifying spectral components, and projecting hyperspectral cubes onto these components to highlight specific spectral features. Originally developed to analyze foliar color changes in Marchantia polymorpha under nutrient stress (Krishnamoorthi S et al. (2024) Cell Reports [https://doi.org/10.1016/j.celrep.2024.114463]), this GitHub repository utilizes ornamental plants as alternative applications.
+This protocol outlines the steps for correcting uneven lighting, identifying spectral components, and projecting hyperspectral cubes onto these components to highlight specific spectral features. Originally developed to analyze foliar color changes of model plants under nutrient stress (Krishnamoorthi S et al. (2024) Cell Reports [https://doi.org/10.1016/j.celrep.2024.114463]), this GitHub repository utilizes ornamental plants as alternative applications.
 </br>
 </br>
 ## Project Workflow
@@ -128,6 +128,11 @@ Note: Figures 3B illustrates the spectral patterns before and after normalizatio
 normalized_cube = resized_masked_cube / resized_masked_cube[:,:,170:175].mean(axis =2)[:,:, np.newaxis]
 ```
 
+<img src="https://github.com/dr-daisuke-urano/Plant-Hyperspectral/blob/main/Figure3.jpg" alt="Alt text" width="60%">
+### Figure 3: Brightness adjustment of leaf reflectance spectra of Goeppertia makoyana hyperspectral images. 
+(A) RGB images of the ventral and dorsal sides of G. makoyana leaves, with a 1 cm scale bar. (B, C) Reflectance patterns and pixel clustering of light-green and dark-green pixels. The graphs display the mean reflectance (solid line) and standard deviation (shaded regions). Data are shown from (top) the original hyperspectral image under uniform lighting, (middle) the same image with a manually applied brightness gradient (90% to 111%), and (bottom) the brightness-normalized image. 
+</br>
+
 ## Data processing
 After background masking and normalization, the hyperspectral cube is prepared for visualizing leaf spectral patterns, extracting pixel groups with similar patterns using clustering algorithms (Figure 3C), and identifying spectral features through spectral component analysis (Figure 4B). 
 
@@ -235,6 +240,109 @@ f.	Return the cluster_membership and the mean_reflectance
 ```python
 return cluster_membership, mean_reflectance
 ```
+
+</br>
+</br>
+<img src="https://github.com/dr-daisuke-urano/Plant-Hyperspectral/blob/main/Figure4.jpg" alt="Alt text" width="60%">
+The protocol workflow: Please find Krishnamoorthi S (under review) STAR*Protocol for more details.
+
+
+## Spectral component analysis
+
+1.	Import hsi_spec_comp_analysis function, which decomposes original hyperspectral images into a reduced number of components using methods such as NMF, SVD, FastICA, PCA, or SparsePCA. It returns both the fitted model and the projected data cube. 
+
+The function requires the following parameters.
+•	cube: 3D hyperspectral data cube of shape (x, y, wavelength). 
+•	bands: 1D array the wavelengths corresponding to the hyperspectral bands.
+•	dim: Number of components to retain.
+•	method: Decomposition method to use. Choose from ‘SVD', 'NMF', 'ICA', 'PCA', 'SparsePCA'. 
+•	path: Absolute path to the directory to save results. 
+
+```python
+model, projected_cube = hsi_spec_comp_analysis(cube, bands, dim=10, method='SVD', path='output_directory')
+```
+
+2.	The below step-by-step process explains the workflow of hsi_spec_comp_analysis function.
+g.	Reshape the 3D hyperspectral cube into a 2D array where each row corresponds to a pixel and each column corresponds to a wavelength.
+
+```python
+x, y, wl = cube.shape
+reshaped_cube = cube.reshape(x * y, wl)
+```
+
+h.	Remove any rows from the reshaped array that contain all NaN values across the wavelength dimension
+```python
+non_nan_pixels = ~np.all(np.isnan(reshaped_cube), axis=1)
+non_nan_reshaped_cube = reshaped_cube[non_nan_pixels]
+```
+
+i.	Choose and initialize the decomposition method available in sklearn.decomposition (skd):
+
+i.	SVD: skd.TruncatedSVD
+SVD factorizes the hyperspectral data into orthogonal components, a matrix of left singular vectors, an orthogonal matrix of singular values, and a matrix of right singular vectors. Top SVD components capture the largest variance in the data. The top SVD components could contain combinations of various spectral features, which may be harder to interpret intuitively.
+
+ii.	NMF: skd.NMF
+NMF factorizes the hyperspectral data into two non-negative matrices, producing components that are more interpretable as the leaf reflectance intensities range from 0 to 1, which cannot be negative. The NMF components are parts-based representations of the original spectra, often useful to highlight individual spectral bands corresponding to distinct phytochemical or structural features of the leaves. 
+
+iii.	FastICA: skd.FastICA
+FastICA (Fast Independent Component Analysis) identifies independent components in reflectance spectra by assuming the components are statistically independent and non-Gaussian. The method first centers the data (subtracting the mean) and standardizes the variance at each wavelength. It then separates the components by maximizing their non-Gaussianity, measured using an approximation of negentropy. Finally, FastICA decorrelates the components and ensures they are statistically independent.
+
+iv.	SparsePCA: skd.SparsePCA
+SparsePCA introduces a sparsity constraint on the principal components, emphasizing only a few dominant wavelengths, which makes the results easier to interpret, especially in cases where specific spectral bands correspond to chemical or structural features of the leaves. 
+
+v.	Raise an error if an unsupported method is chosen.
+```python
+raise ValueError("Unsupported method. Choose 'SVD', 'NMF', 'ICA', 'PCA' or 'SparsePCA'")
+```
+
+j.	Apply the selected decomposition model to the reshaped cube without NaN  
+```python
+hsi_model = model.fit_transform(non_nan_reshaped_cube)
+```
+
+k.	Create an empty array to restore the transformed data
+```python
+hsi_model_full = np.full((x * y, dim), np.nan)
+hsi_model_full[non_nan_pixels] = hsi_model
+```
+
+l.	Reshape the 2D data back into the 3D image
+```python
+projected_cube = hsi_model_full.reshape(x, y, dim)
+```
+
+m.	To visualize the results, generate the plots showing the wavelength and the spatial projection for each component. 
+```python
+for n in range (dim):
+        fig = plt.figure(figsize=(8,4))
+        if method in ['SVD', 'PCA']:
+            fig.suptitle(f'{method} component {n}, Explained Variance Ratio:
+                                {model.explained_variance_ratio_[n]:.3f}')
+        else:
+            fig.suptitle(f'{method} component {n}')
+            
+        ax1 = fig.add_subplot(1, 2, 1)
+        ax2 = fig.add_subplot(1, 2, 2)
+        ax1.plot(bands, model.components_[n])
+        ax1.set_xlabel('Wavelength[nm]')
+        ax1.set_ylabel('Reflectance')
+        cmap = matplotlib.colormaps.get_cmap('gist_earth')
+        cmap.set_bad(color='black')
+        ax2.imshow(projected_cube[:,:,n], cmap=cmap)
+        ax2.axis('off') 
+        if not path is None:
+            fig.savefig(fr'{path}/{method}_component_{n}.pdf')
+        plt.show()
+```
+
+n.	Return the model and the projected hyperspectral cube
+```python
+return model, projected_cube
+```
+
+Note: Figure 3A shows pseudo-colored spectral images of Begonia Tiger Paw generated using the first five components identified by NMF, SparsePCA, SVD, and ICA. Figure 3B shows the spectral patterns of the components, illustrating how each method groups spectral data differently and emphasizes various parts of the spectrum.
+
+
 ## Citation
 Shalini Krishnamoorthi, Grace Zi Hao Tan, Yating Dong, Richalynn Leong, Ting-Ying Wu, Daisuke Urano (2024) [https://doi.org/10.1016/j.celrep.2024.114463].<br>
 Shalini Krishnamoorthi, Daisuke Urano (under review) STAR\*Protocol 
