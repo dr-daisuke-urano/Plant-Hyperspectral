@@ -132,7 +132,7 @@ Figure 2: Brightness adjustment of leaf reflectance spectra of Goeppertia makoya
 </br>
 
 ## Data processing
-After background masking and normalization, the hyperspectral cube is prepared for visualizing leaf spectral patterns, extracting pixel groups with similar patterns using clustering algorithms (Figure 3C), and identifying spectral features through spectral component analysis (Figure 4B). 
+After background masking and normalization, the hyperspectral cube is prepared for visualizing leaf spectral patterns, extracting pixel groups with similar patterns using clustering algorithms (Figure 2C and 3), and identifying spectral features through spectral component analysis (Figure 4B). 
 
 ### Pixel clustering 
 1.	Import the hsi_pixel_clustering function to cluster leaf pixels based on reflectance spectrum. 
@@ -158,13 +158,13 @@ reshaped_cube = cube.reshape(x * y, wl)
 
 b.	Select the clustering method and perform pixel clusterin:
 i.	Kmeans: sklearn.cluster.KMeans
-K-Means is a hard-clustering algorithm that defines cluster centroids and assign each pixel to exactly one cluster. It partitions pixels into distinct groups based on their spectral characteristics by minimizing the variance within each cluster4. The algorithm classifies pixels into a predefined number of clusters (K) set by the user and assigns each pixel to the nearest cluster centroid, which presents the average spectral signature of the pixels within the cluster.
+K-Means is a hard-clustering algorithm that defines cluster centroids and assign each pixel to exactly one cluster. 
 
 ii.	CMeans: skfuzzy.cluster.skfuzzy
-The Fuzzy C-Means algorithm is a soft-clustering method that assigns pixels to multiple clusters with different degrees of membership. Rather than placing each pixel exclusively in a single cluster, C-Means evaluates the pixel's spectral features and computes how closely it aligns with each cluster centroid. The proximity of a pixel's spectral profile to a centroid determines its membership strength in that cluster7. In Figure 3B, C-Means method is utilized to distinguish light- and dark-green pixels based on their spectral characteristics.
+The Fuzzy C-Means algorithm is a soft-clustering method that assigns pixels to multiple clusters with different degrees of membership.
 
 iii.	GMM: sklearn.mixture.GuassianMixture
-GMM (Gaussian Mixture Model) is a soft-clustering method that classifies each pixel in hyperspectral images into several clusters based on probabilities, rather than assigning each pixel to exactly one cluster5. This approach is particularly useful when spectral signatures overlap or when there is uncertainty about which cluster a pixel belongs to. GMM provides a probabilistic framework, allowing for a more detailed understanding of the spectral data by reflecting the likelihood of each pixel belonging to multiple clusters. Below shows an example usage when ‘GMM’ is selected.  
+GMM (Gaussian Mixture Model) is a soft-clustering method that classifies each pixel in hyperspectral images into several clusters based on probabilities, rather than assigning each pixel to exactly one cluster. This approach is particularly useful when spectral signatures overlap or when there is uncertainty about which cluster a pixel belongs to. 
 
 ```python
 from sklearn.mixture import GaussianMixture
