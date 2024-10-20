@@ -286,28 +286,28 @@ FastICA (Fast Independent Component Analysis) identifies independent components 
 iv.	SparsePCA: skd.SparsePCA
 SparsePCA introduces a sparsity constraint on the principal components, emphasizing only a few dominant wavelengths. 
 
-v.	Raise an error if an unsupported method is chosen.
+j.	Raise an error if an unsupported method is chosen.
 ```python
 raise ValueError("Unsupported method. Choose 'SVD', 'NMF', 'ICA', 'PCA' or 'SparsePCA'")
 ```
 
-j.	Apply the selected decomposition model to the reshaped cube without NaN  
+k.	Apply the selected decomposition model to the reshaped cube without NaN  
 ```python
 hsi_model = model.fit_transform(non_nan_reshaped_cube)
 ```
 
-k.	Create an empty array to restore the transformed data
+l.	Create an empty array to restore the transformed data
 ```python
 hsi_model_full = np.full((x * y, dim), np.nan)
 hsi_model_full[non_nan_pixels] = hsi_model
 ```
 
-l.	Reshape the 2D data back into the 3D image
+m.	Reshape the 2D data back into the 3D image
 ```python
 projected_cube = hsi_model_full.reshape(x, y, dim)
 ```
 
-m.	To visualize the results, generate the plots showing the wavelength and the spatial projection for each component. 
+n.	To visualize the results, generate the plots showing the wavelength and the spatial projection for each component. 
 ```python
 for n in range (dim):
         fig = plt.figure(figsize=(8,4))
@@ -331,7 +331,7 @@ for n in range (dim):
         plt.show()
 ```
 
-n.	Return the model and the projected hyperspectral cube
+o.	Return the model and the projected hyperspectral cube
 ```python
 return model, projected_cube
 ```
