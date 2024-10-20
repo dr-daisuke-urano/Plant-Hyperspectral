@@ -141,7 +141,7 @@ membership, cluster_reflectance = hsi_pixel_clustering(cube, bands, num_clusters
 
 </br>
 <img src="https://github.com/dr-daisuke-urano/Plant-Hyperspectral/blob/main/Figure5.jpg" alt="Alt text" width="60%">
-Figure 3: Leaf spectral patterns of clustered pixels in various plant species. Begonia aconitifolia, Aglaonema symphony, and Caladium thousand. (A-C) RGB images and corresponding pixel clusters (top) selected using the GMM clustering method. GMM was applied to hyperspectral cubes after background masking and brightness normalization. The graphs (bottom) display the mean reflectance (solid line) with standard deviations (shaded bands) for the pixel clusters identified by GMM. T
+Figure 3: Leaf spectral patterns of clustered pixels in various plant species. Begonia aconitifolia, Aglaonema symphony, and Caladium thousand. (A-C) RGB images and corresponding pixel clusters (top) selected using the GMM clustering method. GMM was applied to hyperspectral cubes after background masking and brightness normalization. The graphs (bottom) display the mean reflectance (solid line) with standard deviations (shaded bands) for the pixel clusters identified by GMM.
 
 ## Spectral component analysis
 
