@@ -48,15 +48,21 @@ from skimage.transform import resize
 
 2.	Load hyperspectral data cube from the SPECIM IQ image directory. This protocol provides specim_loading function. 
 ```python
-folder = rf'path-to-directory ’
-img_ID = 6766 #Replace with hyperspec data folder
-hyperspectral_cube=specim_loading(rf'path-to-directory/{folder}’)
+folder = r'.\SpecimIQ_images'  # Specify folder location
+img_ID = 6786   # Four sample images are provided; 6271, 6275, 6716 and 6788
+hyperspectral_cube = specimIQ_loading(rf'{folder}\{img_ID}')
+
+# Make a new folder to store result files
+try:
+    os.mkdir(rf'{folder}\{img_ID}_results')
+except FileExistsError:
+    print(f"The {img_ID}_results directory already exists.")
 ```
 
 3.	For visualization, reconstruct RGB image from hyperspectral_cube with specimIQ_RGB function 
 ```python
 original_RGB = specimIQ_RGB(hyperspectral_cube, gamma=1.5) 
-cv2.imwrite('file_to_write.jpg', original_RGB[:,:,::-1])
+cv2.imwrite(rf'{folder}\{img_ID}_results\original_RGB_{img_ID}.jpg', original_RGB[:,:,::-1])
 plt.imshow(original_RGB)
 plt.axis('off')
 plt.show()
@@ -78,7 +84,7 @@ Hyperspectral images of leaves could show inconsistent reflectance, due to facto
 1.	To improve computational efficiency, reduce the number of pixels. Adjust pix_num as required.
 ```python
 pix_num = 200
-resized_masked_cube = resize(cropped_masked_cube, (pix_num, pix_num, 204), mode='reflect', anti_aliasing=True)
+resized_masked_cube = resize(gradated_cube, (pix_num, pix_num, 204), mode='reflect', anti_aliasing=True)
 ```
 
 2.	To normalize the pixel intensity across all wavelength channels, divide the reflectance value by the mean reflectance from the 875-925 nm bands, which typically exhibit high reflectance intensities regardless of species and environmental stresses.
