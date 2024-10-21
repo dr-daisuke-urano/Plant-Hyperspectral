@@ -49,7 +49,7 @@ from skimage.transform import resize
 2.	Load hyperspectral data cube from the SPECIM IQ image directory. This protocol provides specim_loading function. 
 ```python
 folder = r'.\SpecimIQ_images'  # Specify folder location
-img_ID = 6786   # Four sample images are provided; 6271, 6275, 6716 and 6788
+img_ID = 6275   # Four sample images are provided; 6271, 6275, 6716 and 6788
 hyperspectral_cube = specimIQ_loading(rf'{folder}\{img_ID}')
 
 # Make a new folder to store result files
