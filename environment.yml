@@ -1,4 +1,4 @@
-name: Plant_hyperspec
+name: plant_hyperspectral
 channels:
   - conda-forge
   - defaults
