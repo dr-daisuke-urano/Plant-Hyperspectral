@@ -19,6 +19,11 @@ To create a Conda environment with the dependencies used in Krishmoorthi S (unde
 
 ```bash
 conda env create --name Plant-Hyperspectral --file environment.yml
+'''
+Open the Spyder IDE from the created environment
+'''
+conda activate plant_hyperspectral
+spyder
 ```
 
 - python 3.12.3
