@@ -428,7 +428,7 @@ for f, cube in [['Original', resized_masked_cube], ['Normalized', normalized_cub
         [plt.plot(specimIQ_wavelength[10:], model.components_[i, 10:], label=f'{method} Comp. {i+1}') for i in np.arange(5)]; plt.xlabel('Wavelength [nm]'); plt.ylabel('Component Value'); plt.legend()
         plt.savefig(rf'{folder}\{img_ID}_results\{f}\{method}_components.pdf'); plt.show()
 
-    for cluster_method in ['CMeans']: #'GMM']: 
+    for cluster_method in ['CMeans', 'GMM']: 
         membership, reflectance = hsi_pixel_clustering(cube, num_clusters=3, method=cluster_method, path=rf'{folder}\{img_ID}_results\{f}')
         
 #%%
