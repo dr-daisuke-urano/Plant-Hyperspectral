@@ -18,10 +18,10 @@ Figure 1. The workflow of protocol: Please find Krishnamoorthi S (under review) 
 To create a Conda environment with the dependencies used in Krishmoorthi S (under review) STAR\*Protocol, download environment.yml file and use the following command:
 
 ```bash
-conda env create --name Plant-Hyperspectral --file environment.yml
-'''
-Open the Spyder IDE from the created environment
-'''
+# Download environment.yml file and create new environment 
+conda env create --name plant_hyperspectral --file environment.yml
+
+# Open the Spyder IDE from the created environment
 conda activate plant_hyperspectral
 spyder
 ```
