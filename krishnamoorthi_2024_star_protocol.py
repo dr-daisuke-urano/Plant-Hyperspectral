@@ -443,7 +443,7 @@ for f, cube in [['Original', resized_masked_cube], ['Normalized', normalized_cub
     for cluster, color in [[0, 'Darkred'], [1, 'Lightgreen'], [2, 'Olive']]:
         # Get cluster pixels
         c = membership == cluster
-        c_values = (cube * c[:, :, np.newaxis]).reshape(x * y, l)
+        c_values = (cube.reshape(x * y, l) * c[:, np.newaxis])
         
         # Filter out rows with all zeros
         c_values = c_values[~np.all(c_values == 0, axis=1)]
