@@ -1,5 +1,10 @@
 # Leaf Color Patterns Highlighted with Spectral Components Analysis
-This is the official implementation for Krishnamoorthi S et al. (under review) STAR\*Protocol. 
+This is the official implementation for Krishnamoorthi S et al. (under review) STAR\*Protocol. The Python code is available in krishnamoorthi_2024_star_protocol.py. 
+
+```bash
+# To run the notebook, download krishnamoorthi_2024_star_protocol.ipynb and open it in Jupyter Notebook using:
+jupyter notebook krishnamoorthi_2024_star_protocol.ipynb
+```
 
 ## Summary
 Leaf color patterns in nature exhibit remarkable diversity related to chemical properties and structural leaf features. Hyperspectral imaging captures such diverse color patterns with high spectral resolution. Hyperspectral image data are stored as 3D cubes with spatial (x, y) and spectral (λ) dimensions. Spectral component analysis is a powerful technique for extracting complex spectral patterns from leaf reflectance. By projecting hyperspectral images onto decomposed components, this method can reveal distinct color patterns and, in some cases, identify previously undetectable features on leaves. 
