@@ -381,7 +381,7 @@ def hsi_spec_comp_analysis(cube, bands=specimIQ_wavelength, dim=10, path=None, m
 '''
 Load sample hyperspectral image
 '''
-folder = r'.\SpecimIQ_images' # Modify the path to the folder containing hyperspectral images
+folder = r'.\SpecimIQ_images' # Modify the path to the folder containing unzipped hyperspectral image folders (e.g., C:\Users\Admin\Downloads)
 img_ID = 6275   # Four sample images are provided in Figshare (https://figshare.com/s/83e7f0fef20bdb82169f); 6271, 6275, 6716 and 6788
 hyperspectral_cube = specimIQ_loading(rf'{folder}\{img_ID}')
 try:
