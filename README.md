@@ -1,5 +1,7 @@
 # Leaf Color Patterns Highlighted with Spectral Components Analysis
-This is the official implementation for Krishnamoorthi S et al. (under review) STAR\*Protocol. The Python code is available in krishnamoorthi_2024_star_protocol.py. 
+This repository contains the official implementation for Krishnamoorthi S et al. (under review) in the STAR* Protocol.
+
+The Python code is available in krishnamoorthi_2024_star_protocol.py or in Jupyter notebook format as krishnamoorthi_2024_star_protocol.ipynb. Sample hyperspectral images can be downloaded from Figshare (https://figshare.com/s/83e7f0fef20bdb82169f). After downloading, unzip the file to access the images.
 
 ```bash
 # To run the notebook, download krishnamoorthi_2024_star_protocol.ipynb and open it in Jupyter Notebook using:
@@ -56,7 +58,7 @@ from matplotlib import pyplot as plt
 from skimage.transform import resize
 ```
 
-2.	Load hyperspectral data cube from the SPECIM IQ image directory in this GitHub repository. This protocol provides specim_loading function. Note: Download the example hyperspec images from https://figshare.com/s/83e7f0fef20bdb82169f and unzip the file. 
+2.	Load hyperspectral data cube from the SPECIM IQ image directory in this GitHub repository. This protocol provides specim_loading function. Note: Download sample hyperspec images from https://figshare.com/s/83e7f0fef20bdb82169f and unzip the file. 
 ```python
 folder = r'.\SpecimIQ_images'  # Specify folder location
 img_ID = 6275   # Four sample images are provided; 6271, 6275, 6716 and 6788
