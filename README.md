@@ -56,7 +56,7 @@ from matplotlib import pyplot as plt
 from skimage.transform import resize
 ```
 
-2.	Load hyperspectral data cube from the SPECIM IQ image directory. This protocol provides specim_loading function. 
+2.	Load hyperspectral data cube from the SPECIM IQ image directory in this GitHub repository. This protocol provides specim_loading function. Note: Download the example hyperspec images from https://figshare.com/s/83e7f0fef20bdb82169f and unzip the file. 
 ```python
 folder = r'.\SpecimIQ_images'  # Specify folder location
 img_ID = 6275   # Four sample images are provided; 6271, 6275, 6716 and 6788
