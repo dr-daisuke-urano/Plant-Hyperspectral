@@ -1,7 +1,7 @@
 # Leaf Color Patterns Highlighted with Spectral Components Analysis
 This repository contains the official implementation for Krishnamoorthi S et al. (under revision) in the STAR* Protocols.
 
-The Python code is available in krishnamoorthi_2024_star_protocol.py or in Jupyter notebook format as krishnamoorthi_2024_star_protocol.ipynb. Sample hyperspectral images can be downloaded from Figshare (https://figshare.com/s/83e7f0fef20bdb82169f). After downloading, unzip the file to access the images.
+The Python code is available in [krishnamoorthi_2024_star_protocol.py](./krishnamoorthi_2024_star_protocol.py) or in Jupyter notebook format as [krishnamoorthi_2024_star_protocol.ipynb](./krishnamoorthi_2024_star_protocol.ipynb). Sample hyperspectral images can be downloaded from Figshare (https://figshare.com/s/83e7f0fef20bdb82169f). After downloading, unzip the file to access the images.
 
 ```bash
 # To run the notebook, download krishnamoorthi_2024_star_protocol.ipynb and open it in Jupyter Notebook using:
