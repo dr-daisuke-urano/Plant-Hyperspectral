@@ -1,7 +1,7 @@
 # Leaf Color Patterns Highlighted with Spectral Components Analysis
 This repository contains the official implementation for Krishnamoorthi S et al. (under revision) in the STAR* Protocols.
 
-The Python code is available in [krishnamoorthi_2024_star_protocol.py](./krishnamoorthi_2024_star_protocol.py) or in Jupyter notebook format as [krishnamoorthi_2024_star_protocol.ipynb](./krishnamoorthi_2024_star_protocol.ipynb). One sample hyperspectral image can be downloaded from [SpecimIQ_images/6725](./SpecimIQ_images), and other images are available in Figshare (https://figshare.com/s/83e7f0fef20bdb82169f). After downloading, unzip the file to access the images.
+The Python code is available in [krishnamoorthi_2024_star_protocol.py](./krishnamoorthi_2024_star_protocol.py) or in Jupyter notebook format as [krishnamoorthi_2024_star_protocol.ipynb](./krishnamoorthi_2024_star_protocol.ipynb). One sample hyperspectral image can be downloaded from [SpecimIQ_images/6725](./SpecimIQ_images), and other images are available in [Figshare](https://figshare.com/s/83e7f0fef20bdb82169f). After downloading, unzip the file to access the images.
 
 ```bash
 # To run the notebook, download krishnamoorthi_2024_star_protocol.ipynb and open it in Jupyter Notebook using:
@@ -12,7 +12,7 @@ jupyter notebook krishnamoorthi_2024_star_protocol.ipynb
 Leaf color patterns in nature exhibit remarkable diversity related to chemical properties and structural leaf features. Hyperspectral imaging captures such diverse color patterns with high spectral resolution. Hyperspectral image data are stored as 3D cubes with spatial (x, y) and spectral (λ) dimensions. Spectral component analysis is a powerful technique for extracting complex spectral patterns from leaf reflectance. By projecting hyperspectral images onto decomposed components, this method can reveal distinct color patterns and, in some cases, identify previously undetectable features on leaves. 
 </br>
 </br>
-This protocol outlines the steps for correcting uneven lighting, identifying spectral components, and projecting hyperspectral cubes onto these components to highlight specific spectral features. Originally developed to analyze foliar color changes of model plants under nutrient stress (Krishnamoorthi S et al. (2024) Cell Reports [https://doi.org/10.1016/j.celrep.2024.114463]), this GitHub repository utilizes ornamental plants as alternative applications.
+This protocol outlines the steps for correcting uneven lighting, identifying spectral components, and projecting hyperspectral cubes onto these components to highlight specific spectral features. Originally developed to analyze foliar color changes of model plants under nutrient stress ([Krishnamoorthi S et al. (2024) Cell Reports](https://doi.org/10.1016/j.celrep.2024.114463)), this GitHub repository utilizes ornamental plants as alternative applications.
 </br>
 </br>
 ## Project Workflow
@@ -22,7 +22,7 @@ Figure 1. The workflow of protocol: Please find Krishnamoorthi S (under review) 
 </br>
 
 ## Dependencies
-To create a Conda environment with the dependencies used in Krishmoorthi S (under review) STAR\*Protocol, download environment.yml file and use the following command:
+To create a Conda environment with the dependencies used in Krishmoorthi S (under review) STAR\*Protocol, download [environment.yml](./environment.yml) file and use the following command:
 
 ```bash
 # Download environment.yml file and create new environment 
@@ -58,7 +58,7 @@ from matplotlib import pyplot as plt
 from skimage.transform import resize
 ```
 
-2.	Load hyperspectral data cube from the SPECIM IQ image directory in this GitHub repository. This protocol provides specim_loading function. Note: Download sample hyperspec images from https://figshare.com/s/83e7f0fef20bdb82169f and unzip the file. 
+2.	Load hyperspectral data cube from the SPECIM IQ image directory in this GitHub repository. This protocol provides specim_loading function. Note: Download sample hyperspec images from [Figshare](https://figshare.com/s/83e7f0fef20bdb82169f) and unzip the file. 
 ```python
 folder = r'.\SpecimIQ_images'  # Specify folder location
 img_ID = 6275   # Four sample images are provided; 6271, 6275, 6716 and 6788
