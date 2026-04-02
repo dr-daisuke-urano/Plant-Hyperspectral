@@ -153,4 +153,4 @@ Figure 4: Spectral component analysis of Hyperspectral Imaging Data. (A) Pseudo-
 
 ## Citation
 [Krishnamoorthi S, Tan GZH, Dong Y, Leong R, Wu TY, Urano D (2024) Cell Reports](https://doi.org/10.1016/j.celrep.2024.114463).<br>
-[Krishnamoorthi S, Urnao D (2025) STAR\*Protocols](https://www.cell.com/star-protocols/fulltext/S2666-1667(25)00260-6) 
+[Krishnamoorthi S, Urano D (2025) STAR\*Protocols](https://www.cell.com/star-protocols/fulltext/S2666-1667(25)00260-6) 
