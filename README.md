@@ -1,5 +1,5 @@
 # Leaf Color Patterns Highlighted with Spectral Components Analysis
-This repository contains the official implementation for Krishnamoorthi S et al. (under revision) in the STAR* Protocols.
+This repository contains the official implementation for [Krishnamoorthi S et al. (2025) STAR* Protocols 6: 103854](https://www.cell.com/star-protocols/fulltext/S2666-1667(25)00260-6).
 
 The Python code is available in [krishnamoorthi_2024_star_protocol.py](./krishnamoorthi_2024_star_protocol.py) or in Jupyter notebook format as [krishnamoorthi_2024_star_protocol.ipynb](./krishnamoorthi_2024_star_protocol.ipynb). One sample hyperspectral image can be downloaded from [SpecimIQ_images/6725](./SpecimIQ_images), and other images are available in [Figshare](https://figshare.com/s/83e7f0fef20bdb82169f). After downloading, unzip the file to access the images.
 
@@ -153,4 +153,4 @@ Figure 4: Spectral component analysis of Hyperspectral Imaging Data. (A) Pseudo-
 
 ## Citation
 [Krishnamoorthi S, Tan GZH, Dong Y, Leong R, Wu TY, Urano D (2024) Cell Reports](https://doi.org/10.1016/j.celrep.2024.114463).<br>
-Krishnamoorthi S, Urnao D (under revision) STAR\*Protocols 
+[Krishnamoorthi S, Urnao D (2025) STAR\*Protocols](https://www.cell.com/star-protocols/fulltext/S2666-1667(25)00260-6) 
