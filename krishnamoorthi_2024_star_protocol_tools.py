@@ -35,36 +35,6 @@ specimIQ_wavelength = [397.32, 400.20, 403.09, 405.97, 408.85, 411.74, 414.63, 4
 981.96, 985.05, 988.13, 991.22, 994.31, 997.40, 1000.49, 1003.58
 ]
 
-def specimIQ_loading(path):
-    """
-    Load a hyperspectral data cube from the SPECIM IQ image directory.
-
-    Parameters:
-    path (str): The absolute path to the directory containing .hdr and .raw files.
-
-    Returns:
-    np.ndarray: The calibrated hyperspectral data cube.
-    """
-    
-    import spectral as spy
-    import numpy as np
-    
-    # Extract the directory name as the ID
-    ID = path.split('\\')[-1]
- 
-    try:
-        # Open the hyperspectral data files
-        data_ref = spy.io.envi.open(f'{path}\\capture\\{ID}.hdr', f'{path}\\capture\\{ID}.raw')
-        white_ref = spy.io.envi.open(f'{path}\\capture\\WHITEREF_{ID}.hdr', f'{path}\\capture\\WHITEREF_{ID}.raw')
-        dark_ref = spy.io.envi.open(f'{path}\\capture\\DARKREF_{ID}.hdr', f'{path}\\capture\\DARKREF_{ID}.raw')
-    except FileNotFoundError as e:
-        raise FileNotFoundError(f"File not found: {e.filename}")
-
-    # Perform calibration by subtracting dark reference and dividing by the white reference
-    cube = (np.array(data_ref.load()) - np.array(dark_ref.load())) / (np.array(white_ref.load()) - np.array(dark_ref.load()))
-    
-    return cube
-
 def specimIQ_RGB(cube, gamma=1.0):    
     import numpy as np
 
