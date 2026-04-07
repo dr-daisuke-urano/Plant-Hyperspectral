@@ -1,9 +1,9 @@
 # Leaf Color Patterns Highlighted with Spectral Components Analysis
 This repository contains the official implementation for [Krishnamoorthi S et al. (2025) STAR* Protocols 6: 103854](https://www.cell.com/star-protocols/fulltext/S2666-1667(25)00260-6).
 
-The Python code is available in [krishnamoorthi_2024_star_protocol.py](./krishnamoorthi_2024_star_protocol.py) or in Jupyter notebook format as [krishnamoorthi_2024_star_protocol.ipynb](./krishnamoorthi_2024_star_protocol.ipynb). One sample hyperspectral image can be downloaded from [SpecimIQ_images/6725](./SpecimIQ_images), and other images are available in [Figshare](https://figshare.com/s/83e7f0fef20bdb82169f). After downloading, unzip the file to access the images.
+**Quick Start**: You can run the full analysis pipeline immediately in your browser via our [Google Colab Notebook](https://colab.research.google.com/drive/1rby0g9rmLivzVo5y6lDne9li3Vmclk6g?usp=sharing). This Google Colab notebook allows users to run the full hyperspectral analysis pipeline directly in their browser without local installation.
 
-**Quick Start**: You can run the full analysis pipeline immediately in your browser via our [Google Colab Notebook](https://colab.research.google.com/drive/1rby0g9rmLivzVo5y6lDne9li3Vmclk6g?usp=sharing).
+Alternatively, the original Python code is available in [krishnamoorthi_2024_star_protocol.py](./krishnamoorthi_2024_star_protocol.py) or in Jupyter notebook format as [krishnamoorthi_2024_star_protocol.ipynb](./krishnamoorthi_2024_star_protocol.ipynb). One sample hyperspectral image can be downloaded from [SpecimIQ_images/6725](./SpecimIQ_images), and other images are available in [Figshare](https://figshare.com/s/83e7f0fef20bdb82169f). After downloading, unzip the file to access the images.
 
 ```bash
 # To run the notebook, download krishnamoorthi_2024_star_protocol.ipynb and open it in Jupyter Notebook using:
@@ -152,9 +152,6 @@ model, projected_cube = hsi_spec_comp_analysis(cube, bands, dim=10, method='SVD'
 </br>
 <img src="https://github.com/dr-daisuke-urano/Plant-Hyperspectral/blob/main/Figure4.jpg" alt="Alt text" width="60%">
 Figure 4: Spectral component analysis of Hyperspectral Imaging Data. (A) Pseudo-coloured images of Aglaonema symphony obtained from the hyperspectral imaging. Colors represent pixel intensity values projected on ICA, SparcePCA, SVD and NMF components. (B) Line graphs show spectral features identified in top component, whichdescribe how the original data at each wavelength channel contribute to the top components. 
-
-##
-An optimized version of this protocol is available via [Google Colab page](https://colab.research.google.com/drive/1rby0g9rmLivzVo5y6lDne9li3Vmclk6g?usp=sharing). This Google Colab notebook allows users to run the full hyperspectral analysis pipeline directly in their browser without local installation.
 
 ## Citation
 [Krishnamoorthi S, Tan GZH, Dong Y, Leong R, Wu TY, Urano D (2024) Cell Reports](https://doi.org/10.1016/j.celrep.2024.114463)<br>
