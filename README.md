@@ -3,7 +3,7 @@ This repository contains the official implementation for [Krishnamoorthi S et al
 
 The Python code is available in [krishnamoorthi_2024_star_protocol.py](./krishnamoorthi_2024_star_protocol.py) or in Jupyter notebook format as [krishnamoorthi_2024_star_protocol.ipynb](./krishnamoorthi_2024_star_protocol.ipynb). One sample hyperspectral image can be downloaded from [SpecimIQ_images/6725](./SpecimIQ_images), and other images are available in [Figshare](https://figshare.com/s/83e7f0fef20bdb82169f). After downloading, unzip the file to access the images.
 
-Quick Start: You can run the full analysis pipeline immediately in your browser via our [Google Colab Notebook](https://colab.research.google.com/drive/1rby0g9rmLivzVo5y6lDne9li3Vmclk6g?usp=sharing).
+**Quick Start**: You can run the full analysis pipeline immediately in your browser via our [Google Colab Notebook](https://colab.research.google.com/drive/1rby0g9rmLivzVo5y6lDne9li3Vmclk6g?usp=sharing).
 
 ```bash
 # To run the notebook, download krishnamoorthi_2024_star_protocol.ipynb and open it in Jupyter Notebook using:
