@@ -115,80 +115,59 @@ def specimIQ_RGB(cube, gamma=1.0):
     
     return gamma_corrected
 
-def SpecimIQ_background_masking(hyperspectral_cube, threshold_val = 1.0):
-    # A representative leaf reflectance generated with SVD. SPECIM IQ wavelength channels [10:200]
-    plant_reference_spectrum = np.array([0.04069669,  0.04079603,  0.04126037,  0.04213693,  0.04273207,
-            0.04379434,  0.04518137,  0.04713085,  0.04874695,  0.05029235,
-            0.0516203 ,  0.05295029,  0.05294916,  0.05332283,  0.05327264,
-            0.05344182,  0.05390424,  0.05425218,  0.0543171 ,  0.05522408,
-            0.05585662,  0.05727984,  0.05921757,  0.06182781,  0.06514108,
-            0.0688416 ,  0.07287744,  0.07792781,  0.08274431,  0.08712468,
-            0.09143544,  0.09475504,  0.09722056,  0.09856757,  0.0991911 ,
-            0.09913175,  0.09923179,  0.09917054,  0.09974652,  0.10164138,
-            0.10276858,  0.1031924 ,  0.1027126 ,  0.10187102,  0.10124572,
-            0.10113701,  0.10179041,  0.10246365,  0.10329962,  0.10449796,
-            0.10565817,  0.10722926,  0.10852164,  0.10937907,  0.11002037,
-            0.11090264,  0.11098943,  0.11108233,  0.11116369,  0.11111724,
-            0.11098415,  0.11097883,  0.11096041,  0.11322217,  0.11394354,
-            0.11286716,  0.11229089,  0.11243878,  0.11269937,  0.11351002,
-            0.11409797,  0.11430819,  0.1129232 ,  0.11037677,  0.10717013,
-            0.10334962,  0.10013911,  0.09814503,  0.09737767,  0.09646666,
-            0.09434346,  0.09063417,  0.08613345,  0.08249818,  0.07965832,
-            0.07827442,  0.0788685 ,  0.08293296,  0.09276   ,  0.10782823,
-            0.12418226,  0.13724419,  0.14330781,  0.14223865,  0.13543469,
-            0.12344085,  0.10910331,  0.09239325,  0.07515585,  0.05786373,
-            0.04189477,  0.02756335,  0.01521532,  0.00479685, -0.00368386,
-           -0.01059016, -0.01556718, -0.01969922, -0.02287875, -0.02538634,
-           -0.02725541, -0.02868451, -0.0298151 , -0.03078676, -0.03144858,
-           -0.03190495, -0.03239354, -0.03274344, -0.03315384, -0.0335644 ,
-           -0.03404963, -0.03421362, -0.03422848, -0.03380797, -0.03416794,
-           -0.03555574, -0.03529606, -0.03537379, -0.03648132, -0.03648571,
-           -0.03692753, -0.03719202, -0.03735861, -0.037777  , -0.03793817,
-           -0.03801186, -0.0384836 , -0.03849779, -0.03870448, -0.03879738,
-           -0.03916825, -0.03950635, -0.039951  , -0.04001093, -0.04007773,
-           -0.04053165, -0.04100606, -0.04129533, -0.04136556, -0.0415791 ,
-           -0.04163111, -0.04166479, -0.04189004, -0.04211083, -0.04238162,
-           -0.04291235, -0.04348892, -0.04388314, -0.04394482, -0.04384172,
-           -0.04397907, -0.0437822 , -0.04379905, -0.04419531, -0.04406442,
-           -0.04378627, -0.04406204, -0.04387016, -0.04338229, -0.04324095,
-           -0.04314747, -0.04305496, -0.04254075, -0.04202947, -0.04179743,
-           -0.04191031, -0.04088917, -0.0412918 , -0.04073383, -0.04114633,
-           -0.04026839, -0.0399152 , -0.04082155, -0.04049295, -0.04036159,
-           -0.03976451, -0.0397357 , -0.04025013, -0.0402305 , -0.03912869])
-
-    #Apply the representative leaf reflectance to hyperspectral cube for masking background
+def SpecimIQ_background_masking(hyperspectral_cube, threshold_val=1.0, centers=None):
+    """
+    Modified to keep multiple ROIs based on provided center coordinates.
+    centers: List of (x, y) tuples, e.g., [(100, 200), (300, 400), ...]
+    """
+    # 1. Generate reference image using SVD spectrum (Your original logic)
+    plant_reference_spectrum = np.array([...]) # (Keep your array here)
     reference_pic = np.dot(hyperspectral_cube[:, :, 10:200], plant_reference_spectrum)
 
-    # Threshold the SVD image to create a mask
+    # 2. Initial Thresholding and Cleaning
     _, mask = cv2.threshold(reference_pic, threshold_val, 1, cv2.THRESH_BINARY_INV)
-
-    # Morphological operations are applied to make the mask smooth and eroded slightly. 
     mask = cv2.erode(mask, np.ones((3, 3), np.uint8)) 
 
-    # Visualize the original masked area
-    plt.imshow(mask, cmap='gray')
-    plt.axis('OFF')
-    plt.show()
-
-    #Identify contours and refine the masked area that encloses the leaf pixels.
+    # 3. Find all contours
     contours, _ = cv2.findContours(mask.astype(np.uint8), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-    contour = max(contours, key=cv2.contourArea)
+    
+    # 4. Filter contours: Keep only those that contain a provided center coordinate
     refined_mask = np.zeros_like(mask)
-    cv2.drawContours(refined_mask, [contour], -1, (1), thickness=cv2.FILLED)
+    selected_contours = []
+    
+    if centers is not None:
+        for cnt in contours:
+            for (cx, cy) in centers:
+                # check if the point (cx, cy) is inside the contour
+                # result > 0 means inside, 0 on edge, < 0 outside
+                if cv2.pointPolygonTest(cnt, (cx, cy), False) >= 0:
+                    selected_contours.append(cnt)
+                    cv2.drawContours(refined_mask, [cnt], -1, (1), thickness=cv2.FILLED)
+                    break # Move to next contour once a match is found
+    else:
+        # Fallback to your original logic if no centers are provided
+        contour = max(contours, key=cv2.contourArea)
+        selected_contours.append(contour)
+        cv2.drawContours(refined_mask, [contour], -1, (1), thickness=cv2.FILLED)
 
-    # Visualize the refined masked area
-    plt.imshow(refined_mask, cmap='gray')
-    plt.axis('OFF')
-    plt.show()
-
-    #Crop the masked region using the largest contour
-    x, y, w, h = cv2.boundingRect(contour)
+    # 5. Handle Cropping (Using a bounding box that encompasses ALL selected plants)
+    all_cnts = np.concatenate(selected_contours)
+    x, y, w, h = cv2.boundingRect(all_cnts)
+    
+    # Square padding logic (matching your original)
     l = max(w, h)
     masked_cube = hyperspectral_cube * refined_mask[:,:,np.newaxis]
-    masked_cube[masked_cube == 0] = 'nan'
+    masked_cube[masked_cube == 0] = np.nan
+    
     cropped_masked_cube = np.full((l, l, masked_cube.shape[2]), np.nan)
-    cropped_masked_cube[(l-h)//2:h+(l-h)//2, (l-w)//2:w+(l-w)//2, :] = masked_cube[y:y+h,x:x+w,:]
-    print(f'height:{h}, width:{w}')
+    
+    # Calculate offsets to center the group of plants in the square crop
+    y_offset = (l - h) // 2
+    x_offset = (l - w) // 2
+    
+    cropped_masked_cube[y_offset:y_offset+h, x_offset:x_offset+w, :] = masked_cube[y:y+h, x:x+w, :]
+    
+    print(f'Final Crop - Height: {h}, Width: {w}, Total Plants: {len(selected_contours)}')
     
     return cropped_masked_cube, refined_mask
 
