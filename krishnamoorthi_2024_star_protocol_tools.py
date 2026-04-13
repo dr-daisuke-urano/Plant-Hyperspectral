@@ -346,3 +346,104 @@ def hsi_spec_comp_analysis(cube, bands=specimIQ_wavelength, dim=10, path=None, m
     
     # Return the model and the projected hyperspectral cube
     return model, projected_cube
+
+# ----------------------------------------------------------------
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+from google.colab import output
+from PIL import Image
+from io import BytesIO
+
+def select_plant_center(rgb_image):
+    """
+    Displays the image and captures a mouse click to set the center 
+    for the concentric circle analysis.
+    """
+    # Convert RGB to PIL for display
+    img_pil = Image.fromarray((rgb_image * 255).astype(np.uint8))
+    with BytesIO() as f:
+        img_pil.save(f, format='PNG')
+        img_data = f.getvalue()
+
+    print("Click on the center of the plant:")
+    
+    # JavaScript to capture click coordinates
+    from IPython.display import HTML, display
+    js = """
+    <div id="image-container">
+      <img src="data:image/png;base64,{}" id="roi-image" style="cursor: crosshair;">
+    </div>
+    <script>
+      var img = document.getElementById('roi-image');
+      img.onclick = function(e) {{
+        var rect = img.getBoundingClientRect();
+        var x = e.clientX - rect.left;
+        var y = e.clientY - rect.top;
+        google.colab.kernel.invokeFunction('notebook.set_coords', [x, y], {{}});
+      }};
+    </script>
+    """.format(base64.b64encode(img_data).decode())
+    
+    coords = []
+    def set_coords(x, y):
+        coords.append((int(x), int(y)))
+        print(f"Center Selected: x={int(x)}, y={int(y)}")
+
+    output.register_callback('notebook.set_coords', set_coords)
+    display(HTML(js))
+    
+    return coords
+
+# Usage in Colab:
+# center_coords = select_plant_center(original_RGB)
+# --------------------------------------------------------------
+
+def extract_concentric_spectra(cube, center, radii=[30, 60, 90]):
+    """
+    Calculates mean reflectance for Central, Paracentral, and Peripheral regions.
+    radii: [inner_circle, middle_annulus, outer_annulus]
+    """
+    h, w, b = cube.shape
+    y, x = np.ogrid[:h, :w]
+    dist_from_center = np.sqrt((x - center[0])**2 + (y - center[1])**2)
+    
+    # Define Masks
+    masks = [
+        dist_from_center <= radii[0],                          # Central
+        (dist_from_center > radii[0]) & (dist_from_center <= radii[1]), # Paracentral
+        (dist_from_center > radii[1]) & (dist_from_center <= radii[2])  # Peripheral
+    ]
+    
+    labels = ['Central', 'Paracentral', 'Peripheral']
+    colors = ['#2ca02c', '#d62728', '#1f77b4'] # Green, Red, Blue
+    
+    plt.figure(figsize=(10, 6))
+    
+    results = {}
+    for mask, label, color in zip(masks, labels, colors):
+        # Extract pixels within mask
+        region_pixels = cube[mask]
+        
+        # Calculate Mean and Std
+        mean_spec = np.nanmean(region_pixels, axis=0)
+        std_spec = np.nanstd(region_pixels, axis=0)
+        
+        # Plotting
+        plt.plot(specimIQ_wavelength, mean_spec, label=label, color=color, lw=2)
+        plt.fill_between(specimIQ_wavelength, mean_spec - std_spec, mean_spec + std_spec, 
+                         color=color, alpha=0.2)
+        
+        results[label] = mean_spec
+
+    plt.xlabel('Wavelength (nm)')
+    plt.ylabel('Reflectance (normalized)')
+    plt.title('Mean Reflectance by Plant Region')
+    plt.legend()
+    plt.grid(True, alpha=0.3)
+    plt.show()
+    
+    return results
+
+# Usage:
+# results = extract_concentric_spectra(normalized_cube, center_coords[0])
