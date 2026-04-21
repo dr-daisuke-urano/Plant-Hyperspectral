@@ -261,7 +261,7 @@ def hsi_pixel_clustering(cube, bands=specimIQ_wavelength, num_clusters=10, path=
 
     # Visualize each cluster and "All pixels"
     for n in range(num_clusters + 1):
-        fig = plt.figure(figsize=(8, 4))
+        fig = plt.figure(figsize=(14, 6))
 
         ax1 = fig.add_subplot(1, 2, 1)
         ax2 = fig.add_subplot(1, 2, 2)
@@ -341,7 +341,7 @@ def hsi_spec_comp_analysis(cube, bands=specimIQ_wavelength, dim=10, path=None, m
     
     # Visualize and save the results        
     for n in range (dim):
-        fig = plt.figure(figsize=(8,4))
+        fig = plt.figure(figsize=(14,6))
         if method in ['SVD', 'PCA']:
             fig.suptitle(f'{method} component {n}, Explained Variance Ratio: {model.explained_variance_ratio_[n]:.3f}')
         else:
